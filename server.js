@@ -1,8 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// const methodOverride = require('method-override');
 // const session = require('client-sessions');
-// const env = require('dotenv').config();
+const env = require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
 
@@ -39,6 +38,6 @@ app.use(express.static("client/build"));
 
 // });
 
-  app.listen(PORT, function() {
-      console.log("App now listening at localhost:" + PORT);
-  });
+	app.listen(PORT, function() {
+      	console.log("App now listening at localhost:" + PORT);
+  	});
