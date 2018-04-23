@@ -1,1 +1,2 @@
-export { default } from "./Index";
+export * from "./Input";
+export * from "./FormBtn";
