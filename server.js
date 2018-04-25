@@ -9,7 +9,7 @@ let models = require('./models');
 models.sequelize.sync();
 
 // Creating express app and configuring middleware needed for authentication
-var app = express();
+let app = express();
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.json());
@@ -30,7 +30,6 @@ app.use(
 );
 
 const routes = require("./routes");
-// require("./routes/html-routes.js")(app);
 
 app.use(routes);
 

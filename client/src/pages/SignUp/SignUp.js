@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Input, FormBtn } from "../../components/Input";
 import API from "../../utils/API";
 import { Link } from "react-router-dom";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class SignUp extends Component {
   state = {
@@ -37,7 +38,7 @@ class SignUp extends Component {
 
   render() {
     return (
-      <div>
+      <MuiThemeProvider>
         <form>
             <Input
                 value={this.state.firstName}
@@ -86,7 +87,7 @@ class SignUp extends Component {
                   Nevermind..
                 </Link>
           </form>
-      </div> 
+      </MuiThemeProvider> 
     );
   }
 }

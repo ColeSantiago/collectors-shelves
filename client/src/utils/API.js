@@ -7,5 +7,9 @@ export default {
 
   loginUser: function(loginData) {
     return axios.post("/api/shelves/signin", loginData);
+  },
+
+  getUser: function() {
+    return axios.get("/api/shelves/dashboard");
   }
 };

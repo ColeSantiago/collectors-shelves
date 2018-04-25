@@ -18,7 +18,7 @@ router.post("/signup", (req, res) => {
             password: newUser.password
         }).then(function(result){
             sendEmail(newUser);
-            res.redirect("/"); //why is this not working?
+            res.redirect("/");
         }).catch(function(err) {
             console.log(err);
             res.json(err);
@@ -40,13 +40,13 @@ router.post("/signin", function(req, res) {
             if(result) {
                 console.log("passwords match");
                 req.mySession.user = dbUser;
-                console.log(req.mySession.user);
+                console.log(req.mySession);
                     models.user_status.create({
                         login_status: true,
                         userId : dbUser.id
                     }).then(function(status){
                         console.log("You are online!");
-                        res.json(status)
+                        res.json(status);
                     }); 
             } else {
                 alert("We cannot find either you Username or Password");
@@ -67,45 +67,19 @@ router.get("/", function(req, res) {
 });
 
 router.get("/dashboard", function(req, res) {
-	console.log("Is there a session? ", req.mySession);
-
-	if (req.mySession && req.mySession.user) { 
-		let userName =  req.mySession.user.username;
+	if (req.mySession && req.mySession.user) {
 		let loggedInUser = req.mySession.user; 
 	    res.locals.user = loggedInUser;		
-	    db.user_status.findAll({
+	    db.user.findOne({
 		    where: {
-		        login_status : true
+		        id: loggedInUser.id
 		    }        
 		}).then(function(results) {
-		    res.redirect("/dashboard");
+		    res.json(results);
+            console.log(results);
 		});
-	} else {
-		res.redirect('/signin');
-	}
+	} 
 });
-
-//SIGNOUT
-// router.post('/api/signout', function(req,res){
-//     console.log("Signing out User", req.body.userId); 
-    
-//     models.user_status.destroy({
-//         where : {
-//             userId : req.body.userId
-//         }
-//         }).then(function(status){
-//             console.log("You are offline!", status);
-//             res.redirect('/signout');       
-//     	});     
-// });
-
-// router.get('/signout', function(req,res){
-// 	console.log("You are now signing out ....");	 	
-// 	req.mySession.destroy();
-// 	 console.log("Session exists after Signout??", req.mySession)
-// 	 console.log("redirecting to /");
-//   	res.redirect('/');
-// });
 
 function sendEmail(newUser){
     console.log(newUser);
@@ -137,9 +111,5 @@ function sendEmail(newUser){
       }
     });
 }
-
-
-
- 
 
 module.exports = router;
