@@ -16,7 +16,8 @@ router.post("/signup", (req, res) => {
             last_name: newUser.last_name,
             email: newUser.email,
             username: newUser.username,
-            password: newUser.password
+            password: newUser.password,
+            bio: newUser.bio
         }).then(function(result){
             sendEmail(newUser);
             res.redirect("/");
@@ -80,10 +81,6 @@ router.get("/dashboard", function(req, res) {
 		        id: loggedInUser.id
 		    }        
 		}).then(function(results) {
-		    // res.json(results[0].dataValues);
-      //       console.log(results[0].dataValues);
-		
-
             axios.get('http://news.toyark.com/').then(function(response) {
                 let $ = cheerio.load(response.data);
                 let result = {};
@@ -111,8 +108,38 @@ router.get("/dashboard", function(req, res) {
             });
         });
     } 
-
 });
+
+router.post("/profile", function(req, res) {
+    let loggedInUser = req.mySession.user;
+    console.log(req.body.bio)
+    models.user.update({
+        bio: req.body.bio 
+    }, {
+        where: {
+            id: loggedInUser.id
+        }
+    })
+    .then(function(results) {
+        res.json(results)
+    })
+});
+
+// router.get("/profile", function(req, res) {
+//     let loggedInUser = req.mySession.user;
+//     models.user.update({
+//         bio: req.body.bio 
+//     }, {
+//         where: {
+//             userId: loggedInUser.id
+//         }
+//     })
+//     .then(function(results) {
+//         res.json(results)
+//         console.log(results);
+//     })
+// });
+
 
 function sendEmail(newUser){
     console.log(newUser);

@@ -9,5 +9,8 @@ export default {
   },
   scrapeArticles: function() {
   	return axios.get("/api/shelves/dashboard");
-  }
+  },
+  updateBio: function(userBio) {
+  	return axios.post("/api/shelves/profile", userBio);
+  },
 };

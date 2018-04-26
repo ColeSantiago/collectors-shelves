@@ -11,7 +11,8 @@ class SignUp extends Component {
     email: "",
     userName: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    bio: ""
   };
 
   handleInputChange = event => {
@@ -65,6 +66,12 @@ class SignUp extends Component {
                     onChange={this.handleInputChange}
                     name="userName"
                     floatingLabelText="Username"
+                  />
+                  <Input
+                    value={this.state.bio}
+                    onChange={this.handleInputChange}
+                    name="bio"
+                    floatingLabelText="Your Bio"
                   />
                   <Input
                     value={this.state.password}

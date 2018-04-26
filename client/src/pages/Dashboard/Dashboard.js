@@ -14,7 +14,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
   		this.currentUser();
-        this.scrapeArticles();
+        // this.scrapeArticles();
   	};		
 
   	currentUser = () => {
@@ -50,7 +50,7 @@ class Dashboard extends Component {
                 <List>
                     {this.state.articles.map(article => (
                         <ListItem 
-                            key={article._id} 
+                            key={article.id} 
                             title={article.title} 
                             link={article.link}
                         />
