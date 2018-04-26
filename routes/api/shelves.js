@@ -58,25 +58,17 @@ router.post("/signin", function(req, res) {
     });
 }); 
 
-router.get("/", function(req, res) {
-	if (req.mySession && req.mySession.user) {
-		res.redirect("/dashboard");
-	}else{
-		res.redirect("/signin");
-	}
-});
-
 router.get("/dashboard", function(req, res) {
 	if (req.mySession && req.mySession.user) {
 		let loggedInUser = req.mySession.user; 
 	    res.locals.user = loggedInUser;		
-	    db.user.findOne({
+	    db.user.findAll({
 		    where: {
 		        id: loggedInUser.id
 		    }        
 		}).then(function(results) {
-		    res.json(results);
-            console.log(results);
+		    res.json(results[0].dataValues);
+            console.log(results[0].dataValues);
 		});
 	} 
 });
