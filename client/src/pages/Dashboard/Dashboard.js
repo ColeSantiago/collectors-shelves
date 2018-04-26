@@ -4,37 +4,62 @@ import Wrapper from "../../components/Wrapper";
 import Nav from "../../components/Nav";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
-
+import { List, ListItem } from "../../components/List";
 
 class Dashboard extends Component {
 	state = {
-		user: []
+		user: [],
+        articles: []
 	};
 
     componentDidMount() {
   		this.currentUser();
-  	}		
+        this.scrapeArticles();
+  	};		
 
   	currentUser = () => {
   		API.getUser()
     	.then(res => {
-    		this.setState({ user: res.data })
+    		this.setState({ user: res.data.user })
     		console.log(this.state.user);
    		})
     	.catch(err => console.log(err));
   	};
+
+    scrapeArticles = () => {
+        API.scrapeArticles()
+        .then(res => {
+            this.setState({articles: res.data.articles})
+            console.log(this.state.articles);
+        })
+        .catch(err => console.log(err));
+    };
 	
 	render() {
 		return (
-			<Wrapper>
-      <MuiThemeProvider>
-      <Nav />
-      </MuiThemeProvider>
-  			<h1>hey {this.state.user.username}</h1>
-  			    <Link to="/profile">
-                Go To Your Profile
-            </Link>
-			</Wrapper>
+		  <Wrapper>
+            <MuiThemeProvider>
+                <Nav />
+            </MuiThemeProvider>
+          		
+            <h1>hey {this.state.user.username}</h1>
+          		<Link to="/profile">
+                    Go To Your Profile
+                </Link>
+            {this.state.articles.length ? (
+                <List>
+                    {this.state.articles.map(article => (
+                        <ListItem 
+                            key={article._id} 
+                            title={article.title} 
+                            link={article.link}
+                        />
+                    ))}
+                </List>
+            ) : (
+                null
+            )}
+		  </Wrapper>
 		);
 	}
 }

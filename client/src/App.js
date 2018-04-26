@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { Redirect, withRouter } from "react-router";
 import { Input, SignInBtn } from "./SignInForm";
 import Footer from "./components/Footer";
-import Wrapper from "./components/Wrapper";
+import Nav from "./components/Nav";
 import API from "./API";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
@@ -109,13 +109,13 @@ class SignIn extends Component {
             return <Redirect to='/dashboard'/>;
         }
         return(
-            <Wrapper>
+            <div>
                 <MuiThemeProvider>
                     {this.state.redirectToReferrer === false ?
                         <form onSubmit={this.handleFormSubmit.bind(this)}>
                             <Input
                                 value={this.state.userName}
-                                onChange={this.handleInputChange.bind(this)}
+                                onChange={this.handleInputChange}
                                 name="userName"
                                 hintText="Username Field"
                                 floatingLabelText="Username"
@@ -123,7 +123,7 @@ class SignIn extends Component {
                             />
                             <Input
                                 value={this.state.password}
-                                onChange={this.handleInputChange.bind(this)}
+                                onChange={this.handleInputChange}
                                 hintText="Password Field"
                                 floatingLabelText="Password"
                                 floatingLabelFixed={true}
@@ -134,7 +134,7 @@ class SignIn extends Component {
                         <Link className="navbar-link" to="/signup">
                             Sign Up
                         </Link>
-                        <AuthButton />
+                        
                         </form>
                     :null}
                 </MuiThemeProvider>
@@ -144,7 +144,7 @@ class SignIn extends Component {
                         Go To Your Dashboard
                     </Link>
                 :null}
-            </Wrapper>
+            </div>
         );
     }
 }
@@ -152,6 +152,7 @@ class SignIn extends Component {
 const App = () => (
   <Router>
     <div>
+    <AuthButton />
       <Switch>
    		<Route exact path="/" component={SignIn} />
    		<Route exact path="/signup" component={SignUp} />

@@ -4,6 +4,7 @@ const models = require('../../models/index.js');
 let db = require("../../models");
 var nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
+const cheerio = require('cheerio');
 const saltRounds = 10;
 
 router.post("/signup", (req, res) => {
@@ -58,6 +59,18 @@ router.post("/signin", function(req, res) {
     });
 }); 
 
+router.post('/signout', function(req,res){
+    console.log("Signing out User", req.body.userId); 
+    
+     models.user_status.destroy({
+        where : {
+            userId : req.body.userId
+            }
+        }).then(function(status){
+            console.log("You are offline!", status);  
+    });     
+});
+
 router.get("/dashboard", function(req, res) {
 	if (req.mySession && req.mySession.user) {
 		let loggedInUser = req.mySession.user; 
@@ -67,10 +80,38 @@ router.get("/dashboard", function(req, res) {
 		        id: loggedInUser.id
 		    }        
 		}).then(function(results) {
-		    res.json(results[0].dataValues);
-            console.log(results[0].dataValues);
-		});
-	} 
+		    // res.json(results[0].dataValues);
+      //       console.log(results[0].dataValues);
+		
+
+            axios.get('http://news.toyark.com/').then(function(response) {
+                let $ = cheerio.load(response.data);
+                let result = {};
+                $('.entry-header').each(function(i, element) {
+
+                    result.title = $(this)
+                    .text();
+                    result.link = $(this)
+                    .children('h2')
+                    .children('a')
+                    .attr('href');
+
+                    db.articles.create(result)
+                    .then(function(articles) {
+                    })
+                    .catch(function(err) {
+                        return res.json(err);
+                    });
+
+                    db.articles.findAll({})
+                    .then(function(moreResults) {
+                        res.json({user: results[0].dataValues, articles: moreResults});
+                    })
+                });
+            });
+        });
+    } 
+
 });
 
 function sendEmail(newUser){
@@ -102,6 +143,6 @@ function sendEmail(newUser){
         console.log('Response got :', info.response);
       }
     });
-}
+};
 
 module.exports = router;

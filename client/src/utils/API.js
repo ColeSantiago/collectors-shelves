@@ -6,5 +6,8 @@ export default {
   },
   getUser: function() {
     return axios.get("/api/shelves/dashboard");
+  },
+  scrapeArticles: function() {
+  	return axios.get("/api/shelves/dashboard");
   }
 };
