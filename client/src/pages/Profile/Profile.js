@@ -6,41 +6,37 @@ import { Link } from "react-router-dom";
 import { List, ListItem } from "../../components/List";
 import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
+import {withRouter} from 'react-router';
 
 class Dashboard extends Component {
 	state = {
 		user: [],
+        bio: "",
         editBio: "",
         collections: []
 
 	};
 
     componentDidMount() {
-  		this.currentUser();
-        this.getCollections();
-  	};		
+  		this.getUserAndCollections();
+  	};
 
-    currentUser = () => {
-        API.getUser()
+    componentWillUnmount() {
+        this.setState
+    }	
+
+    getUserAndCollections = () => {
+        API.getUserProfile()
         .then(res => {
-            this.setState({ user: res.data.user })
+            this.setState({
+                user: res.data.user,
+                bio: res.data.user.bio,
+                collections: res.data.collection
+            })
+            console.log(res.data.collection);
         })
         .catch(err => console.log(err));
     };
-
-    getCollections = () => {
-        API.loadAllCollections()
-        .then(res => this.setState({ collections: res.data }))
-        .catch(err => console.log(err));
-    };
-
-    // goToCollection = (id) => {
-    //     const selectedCollection = this.state.collections.find(collection => collection.id === id);
-    //     console.log(selectedCollection.id);
-    //     API.loadCollection(selectedCollection.id)
-    //     .then(res => console.log('on profile'))
-    //     .catch(err => console.log(err));
-    // };
 
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -50,12 +46,15 @@ class Dashboard extends Component {
     };
 
     handleFormSubmit = event => {
-        event.preventDefault();
+        // event.preventDefault();
         if (this.state.editBio.length) {
           API.updateBio({
             bio: this.state.editBio
           })
-          .then(res => console.log(res))
+          .then(res => {
+            console.log(res);
+            this.props.history.push('/profile')
+        })
           .catch(err => console.log(err));
         }
     };
@@ -64,7 +63,7 @@ class Dashboard extends Component {
 		return (
             <Wrapper>
 		      <h1>{this.state.user.username}</h1>
-                <div>{this.state.user.bio}</div>
+                <div>{this.state.bio}</div>
                 <MuiThemeProvider>
                     <form>
                         <Input
@@ -89,7 +88,7 @@ class Dashboard extends Component {
                     <List>
                         {this.state.collections.map(collection => (
                             <ListItem 
-                                key={collection.id}
+                                key={collection.title}
                                 id={collection.id} 
                                 title={collection.title} 
                                 description={collection.description}
@@ -109,4 +108,4 @@ class Dashboard extends Component {
 	}
 }
 
-export default Dashboard;
+export default withRouter(Dashboard);

@@ -26,7 +26,7 @@ const AuthButton = withRouter(({ history }) => (
       }}>Sign out</button>
     </p>
   ) : (
-    <p>You are not logged in.</p>
+    null
   )
 ));
 
@@ -105,9 +105,18 @@ class SignIn extends Component {
     };
 
     render() {
-        if (this.state.redirectToReferrer) {
-            return <Redirect to='/dashboard'/>;
-        }
+
+        // const { from } = this.props.location.state || { from: { pathname: '/' } }
+        // const { redirectToReferrer } = this.state
+
+        // if (redirectToReferrer === true) {
+        //   <Redirect to={"/profile"} />
+        // }
+
+        // if (redirectToReferrer === false) {
+        //   <Redirect to={"/"} />
+        // }
+
         return(
             <div>
                 <MuiThemeProvider>

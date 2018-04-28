@@ -125,14 +125,18 @@ router.post("/profile", function(req, res) {
 
 router.get("/profile", function(req, res) {
     let loggedInUser = req.mySession.user;
-    models.user_collection.findAll({
-        where: {
-            userId: loggedInUser.id
-        }
+    models.user.findOne({
+        where: {id: loggedInUser.id},
+        include: [
+            {
+                model: models.user_collection,
+                where: {userId: loggedInUser.id},
+                attributes: ["title", "description", "userId", "id"]
+            }
+        ]
     })
     .then(function(results) {
-        res.json(results)
-        console.log(results);
+        res.json({user: results.dataValues, collection: results.dataValues.user_collections})
     })
 });
 
@@ -144,20 +148,38 @@ router.post("/addcollection", function(req, res) {
         description: req.body.description
     })
     .then(function(results) {
-        console.log(results);
+        console.log('collection created');
     })
 });
 
 router.get("/collection/:id", function(req, res) {
     let loggedInUser = req.mySession.user;
-    models.user_collection.findAll({
+    models.user_collection.findOne({
         where: {
-            userId: loggedInUser.id,
             id: req.params.id
-        }
+        },
+        include: [
+            {
+                model: models.collection_photos,
+                where: {collectionId: req.params.id},
+                attributes: ["photo_link", "id"]
+            }
+        ]
     })
     .then(function(results) {
-        res.json(results);
+        res.json({collectionInfo: results.dataValues, photos: results.collection_photos});
+    })
+});
+
+router.post("/photoupload", function(req, res) {
+    console.log(req.body);
+    models.collection_photos.create({
+        collectionId: req.body.collectionId,
+        photo_link: req.body.photo,
+        userCollectionId: req.body.collectionId, 
+    })
+    .then(function(results) {
+        console.log(results);
     })
 });
 

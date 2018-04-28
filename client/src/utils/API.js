@@ -10,6 +10,9 @@ export default {
   scrapeArticles: function() {
   	return axios.get("/api/shelves/dashboard");
   },
+  getUserProfile: function() {
+  	return axios.get("/api/shelves/profile");
+  },
   updateBio: function(userBio) {
   	return axios.post("/api/shelves/profile", userBio);
   },
@@ -21,5 +24,8 @@ export default {
   },
   loadCollection: function(collectionId) {
   	return axios.get("/api/shelves/collection/" + collectionId);
-  }
+  },
+  savePhoto: function(photoData) {
+  	return axios.post("/api/shelves/photoupload", photoData);
+  },
 };

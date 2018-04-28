@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import Dropzone from "react-dropzone";
 import request from "superagent";
 import API from "../../utils/API";
+import { List, ListItem } from "../../components/PhotoList";
+import Wrapper from "../../components/Wrapper";
 // import { Input, AddCollectionBtn } from "../../components/AddCollectionForm";
 // import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 // import { Link } from "react-router-dom";
-
 import {withRouter} from 'react-router';
-
 
 const CLOUDINARY_UPLOAD_PRESET = 'a5flcvfp';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/colee/image/upload';
@@ -18,19 +18,22 @@ class Collection extends Component {
 
 		this.state = {
 			uploadedFileCloudinaryUrl: '',
-			collection: [],
+			collectionInfo: [],
 			keywords: [],
 			photos: []
 		}
 	};
 
 	componentWillMount() {
-		this.getCollection();;
+		this.getCollection();
 	};
 
 	getCollection = () => {
 		API.loadCollection(this.props.match.params.id)
-		.then(res => this.setState({collection: res.data[0]}))
+		.then(res => this.setState({
+			collectionInfo: res.data.collectionInfo,
+			photos: res.data.photos
+		}))
 		.catch(err => console.log(err));
 	};
 
@@ -54,15 +57,22 @@ class Collection extends Component {
 				this.setState({
 					uploadedFileCloudinaryUrl: response.body.secure_url
 				});
+				let photoData = {
+					photo: response.body.secure_url,
+					collectionId: this.props.match.params.id
+				}
+				API.savePhoto(photoData)
+				.then(res => console.log(res))
+				.catch(err => console.log(err));
 			}
 		});
 	};
 
 	render() {
 		return (
-			<div>
-			<h1>{this.state.collection.title}</h1>
-			<h2>{this.state.collection.description}</h2>
+			<Wrapper>
+			<h1>{this.state.collectionInfo.title}</h1>
+			<h2>{this.state.collectionInfo.description}</h2>
 				<Dropzone
 					multiple={false}
 					accept="image/*"
@@ -79,7 +89,25 @@ class Collection extends Component {
 						</div>
 					}
 				</div>
-			</div>
+
+				<div className="collections">
+	                {this.state.photos.length ? (
+	                    <List>
+	                        {this.state.photos.map(photo => (
+	                            <ListItem 
+	                                key={photo.id}
+	                                id={photo.id} 
+	                                url={photo.photo_link}      
+	                            >
+	                            </ListItem>
+	                        ))}
+
+	                    </List>
+	                ) : (
+	                <h3>Add some photos!</h3>
+	                )}
+	            </div>
+			</Wrapper>
 		);
 	}
 }

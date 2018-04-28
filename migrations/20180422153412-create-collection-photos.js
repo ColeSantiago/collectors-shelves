@@ -11,6 +11,9 @@ module.exports = {
       collectionId: {
         type: Sequelize.INTEGER
       },
+      userCollectionId: {
+        type: Sequelize.INTEGER
+      },
       photo_link: {
         type: Sequelize.STRING
       },

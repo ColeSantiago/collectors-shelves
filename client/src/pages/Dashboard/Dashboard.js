@@ -5,6 +5,7 @@ import Nav from "../../components/Nav";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import { List, ListItem } from "../../components/List";
+import {withRouter} from 'react-router';
 
 class Dashboard extends Component {
 	state = {
@@ -21,7 +22,6 @@ class Dashboard extends Component {
   		API.getUser()
     	.then(res => {
     		this.setState({ user: res.data.user })
-    		console.log(this.state.user);
    		})
     	.catch(err => console.log(err));
   	};
@@ -30,7 +30,6 @@ class Dashboard extends Component {
         API.scrapeArticles()
         .then(res => {
             this.setState({articles: res.data.articles})
-            console.log(this.state.articles);
         })
         .catch(err => console.log(err));
     };
@@ -64,4 +63,4 @@ class Dashboard extends Component {
 	}
 }
 
-export default Dashboard;
+export default withRouter(Dashboard);
