@@ -30,5 +30,11 @@ export default {
   },
   deletePhoto: function(photoId) {
   	return axios.post("/api/shelves/photodelete", photoId);
+  },
+  loadPhoto: function(photoId) {
+  	return axios.get("/api/shelves/editphoto/" + photoId);
+  },
+  updatePhoto: function(titleData) {
+  	return axios.post("/api/shelves/edittitle", titleData);
   }
 };

@@ -4,8 +4,8 @@ import request from "superagent";
 import API from "../../utils/API";
 import { List, ListItem } from "../../components/PhotoList";
 import Wrapper from "../../components/Wrapper";
-// import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-// import { Link } from "react-router-dom";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { Link } from "react-router-dom";
 import {withRouter} from "react-router";
 import DeletePhotoBtn from "../../components/DeletePhotoBtn";
 
@@ -20,7 +20,8 @@ class Collection extends Component {
 			uploadedFileCloudinaryUrl: "",
 			collectionInfo: [],
 			keywords: [],
-			photos: []
+			photos: [],
+			editTitle: ""
 		}
 	};
 
@@ -30,10 +31,13 @@ class Collection extends Component {
 
 	getCollection = () => {
 		API.loadCollection(this.props.match.params.id)
-		.then(res => this.setState({
+		.then(res =>  {
+			this.setState({
 			collectionInfo: res.data.collectionInfo,
 			photos: res.data.photos
-		}))
+			})
+			console.log(res.data.photos);
+		})
 		.catch(err => console.log(err));
 	};
 
@@ -50,7 +54,6 @@ class Collection extends Component {
 		this.setState({
 			uploadedFile: files[0]
 		});
-
 		this.handleImageUpload(files[0]);
 	};
 
@@ -89,7 +92,6 @@ class Collection extends Component {
 				>
 					<p>Drop an image or click select a file to upload. </p>
 				</Dropzone>
-
 				<div>
 					{this.state.uploadedFileCloudinaryUrl === '' ? null :
 						<div>
@@ -98,7 +100,6 @@ class Collection extends Component {
 						</div>
 					}
 				</div>
-
 				<div className="collections">
 	                {this.state.photos.length ? (
 	                    <List>
@@ -106,9 +107,13 @@ class Collection extends Component {
 	                            <ListItem 
 	                                key={photo.id}
 	                                id={photo.id} 
-	                                url={photo.photo_link}      
+	                                url={photo.photo_link}
+	                                title={photo.title}      
 	                            >
-	                            <DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
+	                            	<Link to={`/editphoto/${photo.id}`}>
+	                            	<button>Edit Photo</button>
+	                            	</Link>
+	                            	<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
 	                            </ListItem>
 	                        ))}
 

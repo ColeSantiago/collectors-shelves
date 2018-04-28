@@ -162,7 +162,7 @@ router.get("/collection/:id", function(req, res) {
             {
                 model: models.collection_photos,
                 where: {collectionId: req.params.id},
-                attributes: ["photo_link", "id"]
+                attributes: ["photo_link", "id", "title", "likes"]
             }
         ]
     })
@@ -191,6 +191,28 @@ router.post("/photodelete", function(req, res) {
     })
     .then(function(results) {
         console.log("Photo deleted")
+    })
+});
+
+router.get("/editphoto/:id", function(req, res) {
+    models.collection_photos.findOne({
+        where: {
+            id: req.params.id
+        }
+    })
+    .then(function(result) {
+        res.json(result)
+    })
+});
+
+router.post("/edittitle", function(req, res) {
+    models.collection_photos.update({
+        title: req.body.title
+    }, {
+        where: {id: req.body.id}
+    })
+    .then(function(result) {
+        console.log(result);
     })
 });
 

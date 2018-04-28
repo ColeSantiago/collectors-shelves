@@ -33,7 +33,6 @@ class Dashboard extends Component {
                 bio: res.data.user.bio,
                 collections: res.data.collection
             })
-            console.log(res.data.collection);
         })
         .catch(err => console.log(err));
     };
