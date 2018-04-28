@@ -1,62 +1,74 @@
 import React, { Component } from "react";
-import Dropzone from "react-dropzone";
-import request from "superagent";
-
-const CLOUDINARY_UPLOAD_PRESET = 'a5flcvfp';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/colee/image/upload';
+import { Input, AddCollectionBtn } from "../../components/AddCollectionForm";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { Link } from "react-router-dom";
+import API from "../../utils/API";
 
 class AddCollection extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			uploadedFileCloudinaryUrl: ''
-		}
-	};
-
-	onImageDrop(files) {
-		this.setState({
-			uploadedFile: files[0]
-		});
-
-		this.handleImageUpload(files[0]);
-	};
-
-	handleImageUpload(file) {
-		let upload = request.post(CLOUDINARY_UPLOAD_URL)
-							.field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-							.field('file', file);
-
-		upload.end((err, response) => {
-			if (err) {
-				throw err
-			} if (response.body.secure_url !== '') {
-				this.setState({
-					uploadedFileCloudinaryUrl: response.body.secure_url
-				});
-			}
-		});
+	state = {
+		user: [],
+		title: "",
+		description: "",
 	}
+
+	componentDidMount() {
+  		this.currentUser();
+  	};		
+
+    currentUser = () => {
+        API.getUser()
+        .then(res => {
+            this.setState({ user: res.data.user })
+        })
+        .catch(err => console.log(err));
+    };
+
+    handleInputChange = event => {
+        const { name, value } = event.target;
+        this.setState({
+          [name]: value
+        });
+    };
+
+    handleFormSubmit = event => {
+        
+        if (this.state.title.length) {
+          API.createCollection({
+            userId: this.state.user.id,
+            title: this.state.title,
+            description: this.state.description
+          })
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
+        }
+    };
 
 	render() {
 		return (
 			<div>
-				<Dropzone
-					multiple={false}
-					accept="image/*"
-					onDrop={this.onImageDrop.bind(this)}
-				>
-					<p>Drop an image or click select a file to upload. </p>
-				</Dropzone>
-
-				<div>
-					{this.state.uploadedFileCloudinaryUrl === '' ? null :
-						<div>
-							<p>{this.state.uploadedFile.name}</p>
-							<img src={this.state.uploadedFileCloudinaryUrl} alt={this.state.uploadedFile.name}/>
-						</div>
-					}
-				</div>
+				<h1>Describe your collection first, you'll upload your pictures in a second.</h1>
+				<MuiThemeProvider>
+		          <form>
+		              <Input
+		                  value={this.state.title}
+		                    onChange={this.handleInputChange}
+		                    name="title"
+		                    floatingLabelText="Collection Title"
+		                  />
+		                  <Input
+		                    value={this.state.description}
+		                    onChange={this.handleInputChange}
+		                    name="description"
+		                    floatingLabelText="Collection Description"
+		                  />
+		                  <Link to="/profile">
+		                  	<AddCollectionBtn onClick={this.handleFormSubmit} />
+		                  </Link>
+		                  <Link className="nevermind-link" to="/profile">
+		                    Nevermind
+		                  </Link>
+		            </form>
+		        </MuiThemeProvider>
 			</div>
 		);
 	}

@@ -12,7 +12,6 @@ class SignUp extends Component {
     userName: "",
     password: "",
     confirmPassword: "",
-    bio: ""
   };
 
   handleInputChange = event => {
@@ -23,7 +22,6 @@ class SignUp extends Component {
   };
 
   handleFormSubmit = event => {
-    event.preventDefault();
     if (this.state.password === this.state.confirmPassword) {
       API.createUser({
         first_name: this.state.firstName,
@@ -68,12 +66,6 @@ class SignUp extends Component {
                     floatingLabelText="Username"
                   />
                   <Input
-                    value={this.state.bio}
-                    onChange={this.handleInputChange}
-                    name="bio"
-                    floatingLabelText="Your Bio"
-                  />
-                  <Input
                     value={this.state.password}
                     onChange={this.handleInputChange}
                     name="password"
@@ -87,7 +79,9 @@ class SignUp extends Component {
                     type="password"
                     floatingLabelText="Confirm Password"
                   />
-                  <SignUpBtn onClick={this.handleFormSubmit} />
+                  <Link className="nevermind-link" to="/">
+                    <SignUpBtn onClick={this.handleFormSubmit} />
+                  </Link>
                   <Link className="nevermind-link" to="/">
                     Nevermind..
                   </Link>

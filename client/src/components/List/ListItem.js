@@ -3,6 +3,10 @@ import "./List.css";
 
 export const ListItem = props => (
   <li className="list-group-item">
-    <a className="title" href={props.link} target="_blank">{props.title}</a>
+    {props.title} <br></br>
+    {props.description} <br></br>
+    {props.children}
   </li>
 );
+
+// <a className="title" href={props.link} target="_blank">{props.title}</a>

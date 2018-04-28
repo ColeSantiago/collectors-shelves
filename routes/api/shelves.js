@@ -17,7 +17,6 @@ router.post("/signup", (req, res) => {
             email: newUser.email,
             username: newUser.username,
             password: newUser.password,
-            bio: newUser.bio
         }).then(function(result){
             sendEmail(newUser);
             res.redirect("/");
@@ -112,7 +111,6 @@ router.get("/dashboard", function(req, res) {
 
 router.post("/profile", function(req, res) {
     let loggedInUser = req.mySession.user;
-    console.log(req.body.bio)
     models.user.update({
         bio: req.body.bio 
     }, {
@@ -125,20 +123,29 @@ router.post("/profile", function(req, res) {
     })
 });
 
-// router.get("/profile", function(req, res) {
-//     let loggedInUser = req.mySession.user;
-//     models.user.update({
-//         bio: req.body.bio 
-//     }, {
-//         where: {
-//             userId: loggedInUser.id
-//         }
-//     })
-//     .then(function(results) {
-//         res.json(results)
-//         console.log(results);
-//     })
-// });
+router.get("/profile", function(req, res) {
+    let loggedInUser = req.mySession.user;
+    models.user_collection.findAll({
+        where: {
+            userId: loggedInUser.id
+        }
+    })
+    .then(function(results) {
+        res.json(results)
+        console.log(results);
+    })
+});
+
+router.post("/addcollection", function(req, res) {
+    models.user_collection.create({
+        userId: req.body.userId,
+        title:req.body.title,
+        description: req.body.description
+    })
+    .then(function(results) {
+        console.log(results);
+    })
+});
 
 
 function sendEmail(newUser){

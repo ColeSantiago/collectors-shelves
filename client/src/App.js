@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { Redirect, withRouter } from "react-router";
 import { Input, SignInBtn } from "./SignInForm";
 import Footer from "./components/Footer";
-import Nav from "./components/Nav";
+// import Nav from "./components/Nav";
 import API from "./API";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import AddCollection from "./pages/AddCollection";
-// import Collection from "./pages/Collection";
+import Collection from "./pages/Collection";
 import Dashboard from "./pages/Dashboard";
 // import HomePage from "./pages/HomePage";
 import Profile from "./pages/Profile";
@@ -158,7 +158,8 @@ const App = () => (
    		<Route exact path="/signup" component={SignUp} />
    		<PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/profile" component={Profile} />
-        <PrivateRoute exact path="/add-collection" component={AddCollection} />
+        <PrivateRoute exact path="/addcollection" component={AddCollection} />
+        <PrivateRoute exact path="/collection" component={Collection} />
       </Switch>
       <Footer/>
     </div>
