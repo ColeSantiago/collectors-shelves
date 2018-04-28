@@ -3,8 +3,8 @@ import "./List.css";
 import { Link } from "react-router-dom";
 
 export const ListItem = props => (
-  <li className="list-group-item">
-   <img src={props.url} alt="photo" />
+  <li>
+   <img className="collection-photo" src={props.url} alt="photo" />
    {props.children}
   </li>
 );

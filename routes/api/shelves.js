@@ -183,6 +183,17 @@ router.post("/photoupload", function(req, res) {
     })
 });
 
+router.post("/photodelete", function(req, res) {
+    models.collection_photos.destroy({
+        where: {
+            id: req.body.id
+        }
+    })
+    .then(function(results) {
+        console.log("Photo deleted")
+    })
+});
+
 
 function sendEmail(newUser){
     console.log(newUser);

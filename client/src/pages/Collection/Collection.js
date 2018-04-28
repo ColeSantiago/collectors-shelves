@@ -4,20 +4,20 @@ import request from "superagent";
 import API from "../../utils/API";
 import { List, ListItem } from "../../components/PhotoList";
 import Wrapper from "../../components/Wrapper";
-// import { Input, AddCollectionBtn } from "../../components/AddCollectionForm";
 // import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 // import { Link } from "react-router-dom";
-import {withRouter} from 'react-router';
+import {withRouter} from "react-router";
+import DeletePhotoBtn from "../../components/DeletePhotoBtn";
 
-const CLOUDINARY_UPLOAD_PRESET = 'a5flcvfp';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/colee/image/upload';
+const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
+const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
 
 class Collection extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			uploadedFileCloudinaryUrl: '',
+			uploadedFileCloudinaryUrl: "",
 			collectionInfo: [],
 			keywords: [],
 			photos: []
@@ -36,6 +36,15 @@ class Collection extends Component {
 		}))
 		.catch(err => console.log(err));
 	};
+
+	deletePhoto = id => {
+		let photoId = {
+			id: id
+		}
+	    API.deletePhoto(photoId)
+	    .then(res => this.getCollection())
+	    .catch(err => console.log(err));
+	  };
 
 	onImageDrop(files) {
 		this.setState({
@@ -99,6 +108,7 @@ class Collection extends Component {
 	                                id={photo.id} 
 	                                url={photo.photo_link}      
 	                            >
+	                            <DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
 	                            </ListItem>
 	                        ))}
 

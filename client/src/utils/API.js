@@ -28,4 +28,7 @@ export default {
   savePhoto: function(photoData) {
   	return axios.post("/api/shelves/photoupload", photoData);
   },
+  deletePhoto: function(photoId) {
+  	return axios.post("/api/shelves/photodelete", photoId);
+  }
 };
