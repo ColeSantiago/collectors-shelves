@@ -16,7 +16,10 @@ export default {
   createCollection: function(collectionData) {
   	return axios.post("/api/shelves/addcollection", collectionData);
   },
-  loadCollections: function() {
+  loadAllCollections: function() {
   	return axios.get("/api/shelves/profile");
+  },
+  loadCollection: function(collectionId) {
+  	return axios.get("/api/shelves/collection/" + collectionId);
   }
 };

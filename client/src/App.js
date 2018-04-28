@@ -159,7 +159,7 @@ const App = () => (
    		<PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/profile" component={Profile} />
         <PrivateRoute exact path="/addcollection" component={AddCollection} />
-        <PrivateRoute exact path="/collection" component={Collection} />
+        <PrivateRoute exact path="/collection/:id" component={Collection} />
       </Switch>
       <Footer/>
     </div>

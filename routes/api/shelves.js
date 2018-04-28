@@ -137,6 +137,7 @@ router.get("/profile", function(req, res) {
 });
 
 router.post("/addcollection", function(req, res) {
+    let loggedInUser = req.mySession.user;
     models.user_collection.create({
         userId: req.body.userId,
         title:req.body.title,
@@ -144,6 +145,19 @@ router.post("/addcollection", function(req, res) {
     })
     .then(function(results) {
         console.log(results);
+    })
+});
+
+router.get("/collection/:id", function(req, res) {
+    let loggedInUser = req.mySession.user;
+    models.user_collection.findAll({
+        where: {
+            userId: loggedInUser.id,
+            id: req.params.id
+        }
+    })
+    .then(function(results) {
+        res.json(results);
     })
 });
 

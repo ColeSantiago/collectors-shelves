@@ -29,10 +29,18 @@ class Dashboard extends Component {
     };
 
     getCollections = () => {
-        API.loadCollections()
+        API.loadAllCollections()
         .then(res => this.setState({ collections: res.data }))
         .catch(err => console.log(err));
     };
+
+    // goToCollection = (id) => {
+    //     const selectedCollection = this.state.collections.find(collection => collection.id === id);
+    //     console.log(selectedCollection.id);
+    //     API.loadCollection(selectedCollection.id)
+    //     .then(res => console.log('on profile'))
+    //     .catch(err => console.log(err));
+    // };
 
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -82,9 +90,10 @@ class Dashboard extends Component {
                         {this.state.collections.map(collection => (
                             <ListItem 
                                 key={collection.id}
-                                _id={collection.id} 
+                                id={collection.id} 
                                 title={collection.title} 
                                 description={collection.description}
+                                
                             >
                                 <DeleteCollectBtn onClick={() => this.deleteCollection(collection._id)} />
                             </ListItem>
