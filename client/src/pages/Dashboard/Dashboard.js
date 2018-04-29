@@ -12,29 +12,25 @@ class Dashboard extends Component {
 	state = {
 		user: [],
         articles: [],
-        activity: []
+        activity: [],
+        articleLimit: 10
 	};
 
     componentDidMount() {
   		this.getcurrentUserAndActivity();
-        // this.scrapeArticles();
   	};		
 
   	getcurrentUserAndActivity = () => {
   		API.getUserAndActivity()
     	.then(res => {
-    		this.setState({ user: res.data.user, activity: res.data.activity })
+    		this.setState({ 
+                user: res.data.user, 
+                activity: res.data.activity, 
+                articles: res.data.articles 
+            })
    		})
     	.catch(err => console.log(err));
   	};
-
-    scrapeArticles = () => {
-        API.scrapeArticles()
-        .then(res => {
-            this.setState({articles: res.data.articles})
-        })
-        .catch(err => console.log(err));
-    };
 	
 	render() {
 		return (
@@ -50,7 +46,7 @@ class Dashboard extends Component {
             <div className="article-div">
                 {this.state.articles.length ? (
                     <List>
-                        {this.state.articles.map(article => (
+                        {this.state.articles.slice(0, this.state.articleLimit).map(article => (
                             <ListItem 
                                 key={article.id} 
                                 title={article.title} 

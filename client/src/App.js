@@ -104,16 +104,16 @@ class SignIn extends Component {
 
     render() {
 
-        // const { from } = this.props.location.state || { from: { pathname: '/' } }
-        // const { redirectToReferrer } = this.state
+        const { from } = this.props.location.state || { from: { pathname: '/' } }
+        const { redirectToReferrer } = this.state
 
-        // if (redirectToReferrer === true) {
-        //   <Redirect to={"/profile"} />
-        // }
+        if (redirectToReferrer === true) {
+          <Redirect to={"/profile"} />
+        }
 
-        // if (redirectToReferrer === false) {
-        //   <Redirect to={"/"} />
-        // }
+        if (redirectToReferrer === false) {
+          <Redirect to={"/"} />
+        }
 
         return(
             <div>

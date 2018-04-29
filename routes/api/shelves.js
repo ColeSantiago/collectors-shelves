@@ -27,10 +27,17 @@ router.post("/signup", (req, res) => {
                     title: "Things I Want",
                     description: "Put things you want to own here!",
                 }).then(function(subsubresult) {
-                    sendEmail(newUser);
-                }).catch(function(err) {
-                    console.log(err);
-                    res.json(err);
+                    models.user_friends.create({
+                        userId: 2,
+                        friendId: result.dataValues.id,
+                        username: "colee"
+                    })
+                    .then(function(subsubsubResult) {
+                        sendEmail(newUser);  
+                    }).catch(function(err) {
+                        console.log(err);
+                        res.json(err);
+                    })
                 })
             })
         });                
@@ -51,7 +58,6 @@ router.post("/signin", function(req, res) {
             if(result) {
                 console.log("passwords match");
                 req.mySession.user = dbUser;
-                console.log(req.mySession);
                     models.user_status.create({
                         login_status: true,
                         userId : dbUser.id
@@ -90,42 +96,42 @@ router.get("/dashboard", function(req, res) {
 		        id: loggedInUser.id
 		    }        
 		}).then(function(results) {
-            // axios.get("http://news.toyark.com/").then(function(response) {
-            //     let $ = cheerio.load(response.data);
-            //     let result = {};
-            //     $(".entry-header").each(function(i, element) {
+            axios.get("http://news.toyark.com/").then(function(response) {
+                let $ = cheerio.load(response.data);
+                let result = {};
+                $(".entry-header").each(function(i, element) {
 
-            //         result.title = $(this)
-            //         .text();
-            //         result.link = $(this)
-            //         .children("h2")
-            //         .children("a")
-            //         .attr("href");
+                    result.title = $(this)
+                    .text();
+                    result.link = $(this)
+                    .children("h2")
+                    .children("a")
+                    .attr("href");
 
-            //         models.articles.create(result)
-            //         .then(function(articles) {
-            //         })
-            //         .catch(function(err) {
-            //             return res.json(err);
-            //         });
-
-                    // models.articles.findAll({})
-                    // .then(function(articleResults) {
-                        models.collection_photos.findAll({})
-                        .then(function(photoResults) {
-                            // console.log(photoResults);
-                            res.json({
-                                user: results[0].dataValues, 
-                                // articles: articleResults, 
-                                activity: photoResults
-                            });
+                    models.articles.create(result)
+                    .then(function(articles) {
+                        models.articles.findAll({
+                            order: [
+                                ['id', 'DESC']
+                            ]
                         })
-                    // })
-                // });
+                        .then(function(articleResults) {
+                            models.collection_photos.findAll({})
+                            .then(function(photoResults) {
+                                res.json({
+                                    user: results[0].dataValues, 
+                                    articles: articleResults, 
+                                    activity: photoResults
+                                });
+                            })
+                        })
+                    })
+                });
             });
-        // });
+        });
     } 
 });
+
 
 router.post("/profile", function(req, res) {
     let loggedInUser = req.mySession.user;

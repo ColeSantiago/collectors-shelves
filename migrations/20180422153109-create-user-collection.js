@@ -9,9 +9,17 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER 
       },
       title: {
+        allowNull: false,
+        validate: {
+          len: {
+              args: [3, 25],
+                msg: "Title must be between 3 and 25 characters in length"
+          }
+        },
         type: Sequelize.STRING
       },
       description: {
