@@ -168,7 +168,7 @@ class Collection extends Component {
 								      </div>
 								      </MuiThemeProvider>
 	                            	<Link to={`/editphoto/${photo.id}`}>
-	                            	<button>Edit Photo</button>
+	                            		<button>Edit Photo</button>
 	                            	</Link>
 	                            	<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
 	                            </PhotoListItem>

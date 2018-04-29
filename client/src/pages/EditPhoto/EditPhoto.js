@@ -13,7 +13,6 @@ class EditPhoto extends Component {
 	state = {
         photo: [],
         editTitle: ""
-
 	};
 
     componentWillMount() {

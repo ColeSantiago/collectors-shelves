@@ -28,7 +28,7 @@ router.post("/signup", (req, res) => {
                     description: "Put things you want to own here!",
                 }).then(function(subsubresult) {
                     models.user_friends.create({
-                        userId: 2,
+                        userId: 1,
                         friendId: result.dataValues.id,
                         username: "colee"
                     })
@@ -136,7 +136,8 @@ router.get("/dashboard", function(req, res) {
 router.post("/profile", function(req, res) {
     let loggedInUser = req.mySession.user;
     models.user.update({
-        bio: req.body.bio 
+        bio: req.body.bio,
+        photo: req.body.photo 
     }, {
         where: {
             id: loggedInUser.id

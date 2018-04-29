@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import SignUp from "./pages/SignUp";
 // import Footer from "./components/Footer";
 import EditPhoto from "./pages/EditPhoto";
+import EditProfile from "./pages/EditProfile";
 
 const AuthButton = withRouter(({ history }) => (
   fakeAuth.isAuthenticated ? (
@@ -168,6 +169,7 @@ const App = () => (
         <PrivateRoute exact path="/addcollection" component={AddCollection} />
         <PrivateRoute exact path="/collection/:id" component={Collection} />
         <PrivateRoute exact path="/editphoto/:id" component={EditPhoto} />
+        <PrivateRoute exact path="/editprofile/:username/:id" component={EditProfile} />
       </Switch>
       <Footer/>
     </div>

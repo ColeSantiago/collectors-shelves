@@ -42,6 +42,9 @@ module.exports = {
       bio: {
         type: Sequelize.STRING
       },
+      photo: {
+        type: Sequelize.STRING
+      },
       password: {
         allowNull: false,
         type: Sequelize.STRING, 

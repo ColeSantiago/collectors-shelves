@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import API from "../../utils/API";
-import { Input, UserDetailsBtn } from "../../components/UserDetailsForm";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import { List, ListItem } from "../../components/List";
@@ -14,10 +13,8 @@ class Dashboard extends Component {
 	state = {
 		user: [],
         bio: "",
-        editBio: "",
         collections: [],
         friends: [],
-
 	};
 
     componentDidMount() {
@@ -61,53 +58,23 @@ class Dashboard extends Component {
         .then(res => console.log("unfriended"))
         .catch(err => console.log(err));
     }
-
-    handleInputChange = event => {
-        const { name, value } = event.target;
-        this.setState({
-          [name]: value
-        });
-    };
-
-    handleFormSubmit = event => {
-        // event.preventDefault();
-        if (this.state.editBio.length) {
-          API.updateBio({
-            bio: this.state.editBio
-          })
-          .then(res => {
-            console.log(res);
-            this.props.history.push("/profile")
-        })
-          .catch(err => console.log(err));
-        }
-    };
 	
 	render() {
 		return (
             <Wrapper>
-                <img src={Placeholder} alt="profile picture" />
+                {this.state.user.photo === null ? <img src={Placeholder} alt="profile picture" /> :
+                    <div>
+                        <img src={this.state.user.photo} alt="Actual Profile Picture"/>
+                    </div>
+                }
 		      <h1>{this.state.user.username}</h1>
                 <div>{this.state.bio}</div>
+                <Link to={`/editprofile/${this.props.match.params.username}/${this.props.match.params.id}`}>
+                    <button>Edit Profile</button>
+                </Link>
                 <AddFriendBtn 
                     onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
                 />
-                <MuiThemeProvider>
-                    <form>
-                        <Input
-                            value={this.state.editBio}
-                            onChange={this.handleInputChange}
-                            multiLine={true}
-                            rows={2}
-                            rowsMax={4}
-                            name="editBio"
-                            hintText="Update Your Bio Here"
-                        />
-                        <UserDetailsBtn onClick={this.handleFormSubmit}>
-                            Update
-                        </UserDetailsBtn>
-                    </form>
-                </MuiThemeProvider>
                 <div className="collections">
                     {this.state.friends.length ? (
                         <List>
@@ -115,8 +82,7 @@ class Dashboard extends Component {
                                 <ListItem 
                                     key={friend.friendId}
                                     id={friend.friendId} 
-                                    username={friend.username} 
-                                    
+                                    username={friend.username}    
                                 >
                                 <Link to={`/profile/${friend.username}/${friend.friendId}`}>
                                     {friend.username}
