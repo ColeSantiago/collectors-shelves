@@ -16,7 +16,7 @@ class AddCollection extends Component {
   	};		
 
     currentUser = () => {
-        API.getUser()
+        API.getUserAndActivity()
         .then(res => {
             this.setState({ user: res.data.user })
         })
@@ -47,6 +47,7 @@ class AddCollection extends Component {
 		return (
 			<div>
 				<h1>Describe your collection first, you'll upload your pictures in a second.</h1>
+				{this.state.user.id}
 				<MuiThemeProvider>
 		          <form>
 		              <Input

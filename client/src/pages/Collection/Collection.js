@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Dropzone from "react-dropzone";
 import request from "superagent";
 import API from "../../utils/API";
-import { List, ListItem } from "../../components/PhotoList";
+import { PhotoList, PhotoListItem } from "../../components/PhotoList";
 import Wrapper from "../../components/Wrapper";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
@@ -39,6 +39,7 @@ class Collection extends Component {
 			editTitle: "",
 			editLikes: "",
 			checked: false,
+			user: []
 		};
 	};
 
@@ -51,7 +52,8 @@ class Collection extends Component {
 		.then(res =>  {
 			this.setState({
 			collectionInfo: res.data.collectionInfo,
-			photos: res.data.photos
+			photos: res.data.photos,
+			user: res.data.user[0]
 			})
 		})
 		.catch(err => console.log(err));
@@ -123,6 +125,9 @@ class Collection extends Component {
 	render() {
 		return (
 			<Wrapper>
+				<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
+					{this.state.user.username}
+				</Link>
 			<h1>{this.state.collectionInfo.title}</h1>
 			<h2>{this.state.collectionInfo.description}</h2>
 				<Dropzone
@@ -142,9 +147,9 @@ class Collection extends Component {
 				</div>
 				<div className="collections">
 	                {this.state.photos.length ? (
-	                    <List>
+	                    <PhotoList>
 	                        {this.state.photos.map(photo => (
-	                            <ListItem 
+	                            <PhotoListItem 
 	                                key={photo.id}
 	                                id={photo.id} 
 	                                url={photo.photo_link}
@@ -166,10 +171,10 @@ class Collection extends Component {
 	                            	<button>Edit Photo</button>
 	                            	</Link>
 	                            	<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
-	                            </ListItem>
+	                            </PhotoListItem>
 	                        ))}
 
-	                    </List>
+	                    </PhotoList>
 	                ) : (
 	                <h3>Add some photos!</h3>
 	                )}

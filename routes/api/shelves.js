@@ -1,8 +1,7 @@
 const axios = require("axios");
 const router = require("express").Router();
 const models = require("../../models/index.js");
-let db = require("../../models");
-var nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const cheerio = require("cheerio");
 const saltRounds = 10;
@@ -78,7 +77,7 @@ router.post("/signout", function(req,res){
             userId : req.body.userId
             }
         }).then(function(status){
-            console.log("You are offline!", status);  
+            console.log("You are offline!");  
     });     
 });
 
@@ -86,37 +85,45 @@ router.get("/dashboard", function(req, res) {
 	if (req.mySession && req.mySession.user) {
 		let loggedInUser = req.mySession.user; 
 	    res.locals.user = loggedInUser;		
-	    db.user.findAll({
+	    models.user.findAll({
 		    where: {
 		        id: loggedInUser.id
 		    }        
 		}).then(function(results) {
-            axios.get("http://news.toyark.com/").then(function(response) {
-                let $ = cheerio.load(response.data);
-                let result = {};
-                $(".entry-header").each(function(i, element) {
+            // axios.get("http://news.toyark.com/").then(function(response) {
+            //     let $ = cheerio.load(response.data);
+            //     let result = {};
+            //     $(".entry-header").each(function(i, element) {
 
-                    result.title = $(this)
-                    .text();
-                    result.link = $(this)
-                    .children("h2")
-                    .children("a")
-                    .attr("href");
+            //         result.title = $(this)
+            //         .text();
+            //         result.link = $(this)
+            //         .children("h2")
+            //         .children("a")
+            //         .attr("href");
 
-                    db.articles.create(result)
-                    .then(function(articles) {
-                    })
-                    .catch(function(err) {
-                        return res.json(err);
-                    });
+            //         models.articles.create(result)
+            //         .then(function(articles) {
+            //         })
+            //         .catch(function(err) {
+            //             return res.json(err);
+            //         });
 
-                    db.articles.findAll({})
-                    .then(function(moreResults) {
-                        res.json({user: results[0].dataValues, articles: moreResults});
-                    })
-                });
+                    // models.articles.findAll({})
+                    // .then(function(articleResults) {
+                        models.collection_photos.findAll({})
+                        .then(function(photoResults) {
+                            // console.log(photoResults);
+                            res.json({
+                                user: results[0].dataValues, 
+                                // articles: articleResults, 
+                                activity: photoResults
+                            });
+                        })
+                    // })
+                // });
             });
-        });
+        // });
     } 
 });
 
@@ -135,7 +142,7 @@ router.post("/profile", function(req, res) {
 });
 
 router.get("/profile/:username/:id", function(req, res) {
-    models.user.findOne({
+    models.user.findAll({
         where: {id: req.params.id},
         include: [
             {
@@ -151,11 +158,10 @@ router.get("/profile/:username/:id", function(req, res) {
         ]
     })
     .then(function(results) {
-        console.log(results.dataValues.user_friends);
         res.json({
-            user: results.dataValues, 
-            collection: results.dataValues.user_collections, 
-            friends: results.dataValues.user_friends,
+            user: results[0].dataValues, 
+            collection: results[0].dataValues.user_collections, 
+            friends: results[0].dataValues.user_friends,
         })
     })
 });
@@ -186,7 +192,13 @@ router.get("/collection/:id", function(req, res) {
         ]
     })
     .then(function(results) {
-        res.json({collectionInfo: results.dataValues, photos: results.collection_photos});
+        console.log(results.dataValues.userId)
+        models.user.findAll({
+            where: {id: results.dataValues.userId}
+        })
+        .then(function(userResults) {
+            res.json({collectionInfo: results.dataValues, photos: results.collection_photos, user: userResults});
+        })
     })
 });
 

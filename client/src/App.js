@@ -10,12 +10,9 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AddCollection from "./pages/AddCollection";
 import Collection from "./pages/Collection";
 import Dashboard from "./pages/Dashboard";
-// import HomePage from "./pages/HomePage";
 import Profile from "./pages/Profile";
 // import Search from "./pages/Search";
 import SignUp from "./pages/SignUp";
-// import SignIn from "./pages/SignIn";
-// import UpdateCollection from "./pages/UpdateCollection";
 // import Footer from "./components/Footer";
 import EditPhoto from "./pages/EditPhoto";
 

@@ -8,6 +8,7 @@ import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
 import {withRouter} from "react-router";
 import AddFriendBtn from "../../components/AddFriendBtn";
+import Placeholder from "./placeholder.png"
 
 class Dashboard extends Component {
 	state = {
@@ -85,6 +86,7 @@ class Dashboard extends Component {
 	render() {
 		return (
             <Wrapper>
+                <img src={Placeholder} alt="profile picture" />
 		      <h1>{this.state.user.username}</h1>
                 <div>{this.state.bio}</div>
                 <AddFriendBtn 
@@ -128,6 +130,8 @@ class Dashboard extends Component {
                     <h3>Click the button above to start sharing your collections!</h3>
                     )}
                 </div>
+                <div className="liked-photos">Liked Photos here</div>
+                <div className="notifiction-div">Notifictions here</div>
             <Link to="/addcollection">
                 Add a new Collection
             </Link>
