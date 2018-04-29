@@ -42,7 +42,7 @@ class Dashboard extends Component {
             </MuiThemeProvider>
           		
             <h1>hey {this.state.user.username}</h1>
-          		<Link to="/profile">
+          		<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
                     Go To Your Profile
                 </Link>
             {this.state.articles.length ? (

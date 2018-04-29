@@ -6,14 +6,16 @@ import { Link } from "react-router-dom";
 import { List, ListItem } from "../../components/List";
 import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
-import {withRouter} from 'react-router';
+import {withRouter} from "react-router";
+import AddFriendBtn from "../../components/AddFriendBtn";
 
 class Dashboard extends Component {
 	state = {
 		user: [],
         bio: "",
         editBio: "",
-        collections: []
+        collections: [],
+        friends: [],
 
 	};
 
@@ -22,25 +24,42 @@ class Dashboard extends Component {
   	};	
 
     getUserAndCollections = () => {
-        API.getUserProfile()
+        API.getUserProfile(this.props.match.params.username, this.props.match.params.id)
         .then(res => {
             this.setState({
                 user: res.data.user,
                 bio: res.data.user.bio,
-                collections: res.data.collection
+                collections: res.data.collection,
+                friends: res.data.friends
             })
         })
         .catch(err => console.log(err));
     };
 
     deleteCollection = id => {
-        console.log(id);
         API.deleteCollection({
             id: id
         })
         .then(res => console.log("collection deleted"))
         .catch(err => console.log(err));
     };
+
+    addFriend(id, username) {
+        API.addFriend({
+            friendId: id,
+            username: username
+        })
+        .then(res => console.log('friend added'))
+        .catch(err => console.log(err));
+    };
+
+    deleteFriend = id => {
+        API.deleteFriend({
+            friendId: id
+        })
+        .then(res => console.log("unfriended"))
+        .catch(err => console.log(err));
+    }
 
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -57,7 +76,7 @@ class Dashboard extends Component {
           })
           .then(res => {
             console.log(res);
-            this.props.history.push('/profile')
+            this.props.history.push("/profile")
         })
           .catch(err => console.log(err));
         }
@@ -68,6 +87,9 @@ class Dashboard extends Component {
             <Wrapper>
 		      <h1>{this.state.user.username}</h1>
                 <div>{this.state.bio}</div>
+                <AddFriendBtn 
+                    onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
+                />
                 <MuiThemeProvider>
                     <form>
                         <Input
@@ -84,6 +106,28 @@ class Dashboard extends Component {
                         </UserDetailsBtn>
                     </form>
                 </MuiThemeProvider>
+                <div className="collections">
+                    {this.state.friends.length ? (
+                        <List>
+                            {this.state.friends.map(friend => (
+                                <ListItem 
+                                    key={friend.friendId}
+                                    id={friend.friendId} 
+                                    username={friend.username} 
+                                    
+                                >
+                                <Link to={`/profile/${friend.username}/${friend.friendId}`}>
+                                    {friend.username}
+                                </Link>
+                                    <DeleteCollectBtn onClick={() => this.deleteFriend(friend.friendId)} />
+                                </ListItem>
+                            ))}
+
+                        </List>
+                    ) : (
+                    <h3>Click the button above to start sharing your collections!</h3>
+                    )}
+                </div>
             <Link to="/addcollection">
                 Add a new Collection
             </Link>

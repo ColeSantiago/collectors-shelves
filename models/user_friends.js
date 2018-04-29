@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   var user_friends = sequelize.define('user_friends', {
     userId: DataTypes.INTEGER,
-    friendId: DataTypes.INTEGER
+    friendId: DataTypes.INTEGER,
+    username: DataTypes.STRING,
   }, {});
   user_friends.associate = function(models) {
     // associations can be defined here

@@ -167,7 +167,7 @@ const App = () => (
    		<Route exact path="/" component={SignIn} />
    		<Route exact path="/signup" component={SignUp} />
    		<PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/profile" component={Profile} />
+        <PrivateRoute exact path="/profile/:username/:id" component={Profile} />
         <PrivateRoute exact path="/addcollection" component={AddCollection} />
         <PrivateRoute exact path="/collection/:id" component={Collection} />
         <PrivateRoute exact path="/editphoto/:id" component={EditPhoto} />

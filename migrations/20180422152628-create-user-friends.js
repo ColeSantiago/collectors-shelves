@@ -14,6 +14,9 @@ module.exports = {
       friendId: {
         type: Sequelize.INTEGER
       },
+      username: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

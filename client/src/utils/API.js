@@ -10,8 +10,8 @@ export default {
   scrapeArticles: function() {
   	return axios.get("/api/shelves/dashboard");
   },
-  getUserProfile: function() {
-  	return axios.get("/api/shelves/profile");
+  getUserProfile: function(username, id) {
+  	return axios.get("/api/shelves/profile/" + username + "/" + id);
   },
   updateBio: function(userBio) {
   	return axios.post("/api/shelves/profile", userBio);
@@ -43,4 +43,10 @@ export default {
   addLike: function(photoId) {
   	return axios.post("/api/shelves/addlike", photoId);
   },
+  addFriend: function(friendId) {
+  	return axios.post("/api/shelves/addfriend", friendId);
+  },
+  deleteFriend: function(friendId) {
+  	return axios.post("/api/shelves/unfriend", friendId);
+  }
 };
