@@ -25,6 +25,9 @@ export default {
   loadCollection: function(collectionId) {
   	return axios.get("/api/shelves/collection/" + collectionId);
   },
+  deleteCollection: function(collectionId) {
+  	return axios.post("/api/shelves/deletecollection", collectionId);
+  },
   savePhoto: function(photoData) {
   	return axios.post("/api/shelves/photoupload", photoData);
   },
@@ -36,5 +39,8 @@ export default {
   },
   updatePhoto: function(titleData) {
   	return axios.post("/api/shelves/edittitle", titleData);
-  }
+  },
+  addLike: function(photoId) {
+  	return axios.post("/api/shelves/addlike", photoId);
+  },
 };

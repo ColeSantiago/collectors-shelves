@@ -19,11 +19,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
   		this.getUserAndCollections();
-  	};
-
-    componentWillUnmount() {
-        this.setState
-    }	
+  	};	
 
     getUserAndCollections = () => {
         API.getUserProfile()
@@ -34,6 +30,15 @@ class Dashboard extends Component {
                 collections: res.data.collection
             })
         })
+        .catch(err => console.log(err));
+    };
+
+    deleteCollection = id => {
+        console.log(id);
+        API.deleteCollection({
+            id: id
+        })
+        .then(res => console.log("collection deleted"))
         .catch(err => console.log(err));
     };
 
@@ -93,7 +98,7 @@ class Dashboard extends Component {
                                 description={collection.description}
                                 
                             >
-                                <DeleteCollectBtn onClick={() => this.deleteCollection(collection._id)} />
+                                <DeleteCollectBtn onClick={() => this.deleteCollection(collection.id)} />
                             </ListItem>
                         ))}
 

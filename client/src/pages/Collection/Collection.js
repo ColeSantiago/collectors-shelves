@@ -8,9 +8,24 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import {withRouter} from "react-router";
 import DeletePhotoBtn from "../../components/DeletePhotoBtn";
+// import LikeBtn from "../../components/LikeBtn";
+import Checkbox from 'material-ui/Checkbox';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+// import Visibility from 'material-ui/svg-icons/action/visibility';
+// import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
+
+const styles = {
+  block: {
+    maxWidth: 250,
+  },
+  checkbox: {
+    marginBottom: 16,
+  },
+};
 
 class Collection extends Component {
 	constructor(props) {
@@ -21,8 +36,10 @@ class Collection extends Component {
 			collectionInfo: [],
 			keywords: [],
 			photos: [],
-			editTitle: ""
-		}
+			editTitle: "",
+			editLikes: "",
+			checked: false,
+		};
 	};
 
 	componentWillMount() {
@@ -36,7 +53,6 @@ class Collection extends Component {
 			collectionInfo: res.data.collectionInfo,
 			photos: res.data.photos
 			})
-			console.log(res.data.photos);
 		})
 		.catch(err => console.log(err));
 	};
@@ -48,6 +64,30 @@ class Collection extends Component {
 	    API.deletePhoto(photoId)
 	    .then(res => this.getCollection())
 	    .catch(err => console.log(err));
+	  };
+
+	  updateCheck() {
+	    this.setState((oldState) => {
+	      return {
+	        checked: !oldState.checked,
+	      };
+	    });
+	  };
+
+	  onCheck(event, isInputChecked) {
+	    if (isInputChecked) {
+	      console.log('liked');
+	    } else {
+	      console.log("unliked");
+	    }
+	  };
+
+	  onChange(id) {
+	  	API.addLike({
+	    	id: id
+	    })
+	   .then(res => console.log(res))
+	   .catch(err => console.log(err));
 	  };
 
 	onImageDrop(files) {
@@ -108,8 +148,20 @@ class Collection extends Component {
 	                                key={photo.id}
 	                                id={photo.id} 
 	                                url={photo.photo_link}
-	                                title={photo.title}      
+	                                title={photo.title}
+	                                likes={photo.likes}     
 	                            >
+	                            	<MuiThemeProvider>
+	                                  <div style={styles.block}>
+								        <Checkbox
+								          onCheck={this.onCheck}
+								          onChange={this.onChange(photo.id)}
+								          checkedIcon={<ActionFavorite />}
+								          uncheckedIcon={<ActionFavoriteBorder />}
+								          style={styles.checkbox}
+								        />
+								      </div>
+								      </MuiThemeProvider>
 	                            	<Link to={`/editphoto/${photo.id}`}>
 	                            	<button>Edit Photo</button>
 	                            	</Link>

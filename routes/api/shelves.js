@@ -18,11 +18,23 @@ router.post("/signup", (req, res) => {
             username: newUser.username,
             password: newUser.password,
         }).then(function(result){
-            sendEmail(newUser);
-            res.redirect("/");
-        }).catch(function(err) {
-            console.log(err);
-            res.json(err);
+            models.user_collection.create({
+                userId: result.dataValues.id,
+                title: "My Favorite Things That I Own",
+                description: "Load your favorites here!",
+            }).then(function(subresult) {
+                models.user_collection.create({
+                    userId: result.dataValues.id,
+                    title: "Things I Want",
+                    description: "Put things you want to own here!",
+                }).then(function(subsubresult) {
+                    sendEmail(newUser);
+                    res.redirect("/");
+                }).catch(function(err) {
+                    console.log(err);
+                    res.json(err);
+                })
+            })
         });                
     });
 });  
@@ -171,12 +183,23 @@ router.get("/collection/:id", function(req, res) {
     })
 });
 
+router.post("/deletecollection", function(req, res) {
+    console.log(req.body.id);
+    models.user_collection.destroy({
+        where: {id: req.body.id}
+    })
+    .then(function(results) {
+        console.log('deleted');
+    })
+})
+
 router.post("/photoupload", function(req, res) {
     console.log(req.body);
     models.collection_photos.create({
         collectionId: req.body.collectionId,
         photo_link: req.body.photo,
-        userCollectionId: req.body.collectionId, 
+        userCollectionId: req.body.collectionId,
+        likes: 0 
     })
     .then(function(results) {
         console.log(results);
@@ -208,6 +231,29 @@ router.get("/editphoto/:id", function(req, res) {
 router.post("/edittitle", function(req, res) {
     models.collection_photos.update({
         title: req.body.title
+    }, {
+        where: {id: req.body.id}
+    })
+    .then(function(result) {
+        console.log("title changed");
+    })
+});
+
+router.post("/addlike", function(req, res) {
+    console.log(req.body.id);
+    models.collection_photos.update({
+        likes: + 1
+    }, {
+        where: {id: req.body.id}
+    })
+    .then(function(result) {
+        console.log(result);
+    })
+});
+
+router.post("/subtractlike", function(req, res) {
+    models.collection_photosat.update({
+        likes: likes - 1
     }, {
         where: {id: req.body.id}
     })

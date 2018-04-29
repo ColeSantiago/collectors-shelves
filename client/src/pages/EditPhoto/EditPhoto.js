@@ -3,8 +3,8 @@ import API from "../../utils/API";
 import Wrapper from "../../components/Wrapper";
 import Nav from "../../components/Nav";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { Link } from "react-router-dom";
-import { List, ListItem } from "../../components/List";
+// import { Link } from "react-router-dom";
+// import { List, ListItem } from "../../components/List";
 import {withRouter} from 'react-router';
 import { Input, EditPhotoBtn } from "../../components/EditPhotoForm";
 import "./EditPhoto.css";
@@ -54,7 +54,7 @@ class EditPhoto extends Component {
             <MuiThemeProvider>
                 <Nav />
             </MuiThemeProvider>
-            <img src={this.state.photo.photo_link} alt="photo" />
+            <img src={this.state.photo.photo_link} alt={this.state.photo.photo_link} />
             <MuiThemeProvider>
                 <form>
                     <Input
