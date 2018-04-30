@@ -3,6 +3,7 @@ import API from "../../utils/API";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import { List, ListItem } from "../../components/CollectionList";
+import { NotificationList, NotificationListItem } from "../../components/NotificationList";
 import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
 import {withRouter} from "react-router";
@@ -17,6 +18,7 @@ class Dashboard extends Component {
         bio: "",
         collections: [],
         friends: [],
+        notifications: [],
         currentUser: [],
         isUser: false,
         isClicked: false
@@ -34,6 +36,7 @@ class Dashboard extends Component {
                 bio: res.data.user.bio,
                 collections: res.data.collection,
                 friends: res.data.friends,
+                notifications: res.data.notifications,
                 currentUser: res.data.currentUser[0]
             })
             this.userSpecific();
@@ -76,16 +79,16 @@ class Dashboard extends Component {
         this.getUserAndCollections();
     }
 
-    handleClap(userId) {
-        console.log(userId);
+    handleClap(userId, username) {
         if (this.state.isClicked === false) {
             this.setState({isClicked: true})
-            console.log("liked")
             API.addClap({
-                id: userId
+                id: userId,
+                username: username
             })
-            .then(res => this.getCollection())
+            .then(res => console.log('clap'))
             .catch(err => console.log(err));
+            this.getUserAndCollections();
         } else {
             console.log("disliked")
             this.setState({isClicked: false})
@@ -104,6 +107,7 @@ class Dashboard extends Component {
                     </div>
                 }
 		      <h1>{this.state.user.username}</h1>
+              <h1>I've been applaued {this.state.user.claps} time(s)</h1>
                 <div>{this.state.bio}</div>
                 {this.state.isUser ? (
                     <Link to={`/editprofile/${this.props.match.params.username}/${this.props.match.params.id}`}>
@@ -117,10 +121,8 @@ class Dashboard extends Component {
                         <AddFriendBtn 
                             onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
                         />
-                        <div onClick={() => this.handleClap(this.state.user.id)}>
+                        <div onClick={() => this.handleClap(this.state.user.id, this.state.currentUser.username)}>
                             <Clap
-                                count={this.state.user.claps + 1}
-                                countTotal={this.state.user.claps}
                                 isClicked={this.state.isClicked}
                                 maxCount={1}
                                 theme={{
@@ -157,10 +159,25 @@ class Dashboard extends Component {
                     <h3>Click the button above to start sharing your collections!</h3>
                     )}
                 </div>
-                <div className="liked-photos">Liked Photos here</div>
                 {this.state.isUser ? (
                     <div>
-                        <div className="notifiction-div">Notifictions here</div>
+                       <div className="notifications">
+                                {this.state.notifications.length ? (
+                                    <NotificationList>
+                                        {this.state.notifications.map(notification => (
+                                            <NotificationListItem 
+                                                key={notification.id}
+                                                id={notification.id} 
+                                                message={notification.message} 
+                                                friendId={notification.friendId}
+                                                friendUsername={notification.friendUsername}
+                                            />
+                                        ))}
+                                    </NotificationList>
+                            ) : (
+                            <h3>You don't have any notifications yet</h3>
+                            )}
+                        </div>
                         <Link to="/addcollection">Add a new Collection</Link>
                     </div>
                  ) : (

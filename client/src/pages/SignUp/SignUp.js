@@ -30,7 +30,7 @@ class SignUp extends Component {
         username: this.state.userName,
         password: this.state.password,
       })
-      .then(res => res.redirect('/'))
+      .then(res => console.log('user created'))
       .catch(err => console.log(err));
     }
   };

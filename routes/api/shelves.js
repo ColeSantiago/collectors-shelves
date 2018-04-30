@@ -22,22 +22,38 @@ router.post("/signup", (req, res) => {
                 userId: result.dataValues.id,
                 title: "My Favorite Things That I Own",
                 description: "Load your favorites here!",
-            }).then(function(subresult) {
+            }).then(function(favCollectionResult) {
                 models.user_collection.create({
                     userId: result.dataValues.id,
                     title: "Things I Want",
                     description: "Put things you want to own here!",
-                }).then(function(subsubresult) {
-                    models.user_friends.create({
-                        userId: result.dataValues.id,
-                        friendId: 1,
-                        username: "colee"
+                }).then(function(wantCollectionResult) {
+                    models.collection_photos.create({
+                        collectionId: wantCollectionResult.dataValues.id,
+                        userCollectionId: wantCollectionResult.dataValues.id, 
                     })
-                    .then(function(subsubsubResult) {
-                        sendEmail(newUser);  
-                    }).catch(function(err) {
-                        console.log(err);
-                        res.json(err);
+                    .then(function(wantCollectionPhotoResult) {
+                        models.collection_photos.create({
+                            collectionId: favCollectionResult.dataValues.id,
+                            userCollectionId: favCollectionResult.dataValues.id,  
+                        })
+                        .then(function(favCollectionPhotoResult) {
+                            models.user_friends.create({
+                                userId: result.dataValues.id
+                            })
+                            .then(function(friendResult) {
+                                models.user_notifications.create({
+                                    userId: result.dataValues.id,
+                                    message: "Welcome to collectorshelves.com!"
+                                })
+                                .then(function(notificationResult) {
+                                    sendEmail(newUser);  
+                                }).catch(function(err) {
+                                    console.log(err);
+                                    res.json(err);
+                                })
+                            })
+                        })
                     })
                 })
             })
@@ -161,13 +177,21 @@ router.get("/profile/:username/:id", function(req, res) {
             {
                 model: models.user_collection,
                 where: {userId: req.params.id},
-                attributes: ["title", "description", "userId", "id"]
+                attributes: ["title", "description", "userId", "id"],
+                order: [
+                    ['id', 'DESC']
+                ]
             }, 
             {
                 model: models.user_friends,
                 where: {userId: req.params.id},
                 attributes: ["friendId", "username"],         
             },
+            {
+                model: models.user_notifications,
+                where: {userId: req.params.id},
+                attributes: ["message", "friendId", "friendUsername", "id"]
+            }
         ]
     })
     .then(function(results) {
@@ -179,6 +203,7 @@ router.get("/profile/:username/:id", function(req, res) {
                 user: results[0].dataValues, 
                 collection: results[0].dataValues.user_collections, 
                 friends: results[0].dataValues.user_friends,
+                notifications: results[0].dataValues.user_notifications,
                 currentUser: currentUserResults
             })
         })
@@ -192,27 +217,34 @@ router.post("/addcollection", function(req, res) {
         description: req.body.description
     })
     .then(function(results) {
+        models.collection_photos.create({
+            collectionId: results.dataValues.id,
+            userCollectionId: results.dataValues.id,
+        })
         console.log("collection created");
     })
 });
 
 router.get("/collection/:id", function(req, res) {
     let loggedInUser = req.mySession.user;
-    models.user_collection.findOne({
+    models.user_collection.findAll({
         where: {
-            id: req.params.id
+            id: req.params.id,
         },
         include: [
             {
                 model: models.collection_photos,
                 where: {collectionId: req.params.id},
-                attributes: ["photo_link", "id", "title", "likes"]
+                attributes: ["photo_link", "id", "title"],
+                order: [
+                    ['id', 'DESC']
+                ]
             }
         ]
     })
     .then(function(results) {
         models.user.findAll({
-            where: {id: results.dataValues.userId}
+            where: {id: results[0].dataValues.userId}
         })
         .then(function(userResults) {
             models.user.findAll({
@@ -220,8 +252,8 @@ router.get("/collection/:id", function(req, res) {
             })
             .then(function(currentUserResults) {
                 res.json({
-                    collectionInfo: results.dataValues, 
-                    photos: results.collection_photos, 
+                    collectionInfo: results[0].dataValues, 
+                    photos: results[0].collection_photos, 
                     user: userResults,
                     currentUser: currentUserResults
                 })
@@ -299,14 +331,13 @@ router.post("/addclap", function(req, res) {
             message: `${req.body.username} applauded you!`
         })
         .then(function(subResult) {
-            console.log(result);
-            console.log(subresult);
+            console.log('clap');
         })
     })
 });
 
 router.post("/subtractlike", function(req, res) {
-    models.collection_photosat.update({
+    models.collection_photos.update({
         likes: - 1
     }, {
         where: {id: req.body.id}

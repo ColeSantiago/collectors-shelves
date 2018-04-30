@@ -7,7 +7,6 @@ export const PhotoListItem = props => (
   	<Link to={`/collection/${props.collectionId}`}>
 	   <img className="collection-photo" src={props.url} alt={props.title} />
 	   {props.title}
-	   {props.likes}
 	   {props.children}
    </Link>
   </li>

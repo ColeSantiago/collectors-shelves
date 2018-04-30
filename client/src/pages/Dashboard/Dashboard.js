@@ -66,8 +66,7 @@ class Dashboard extends Component {
                                     id={photo.id}
                                     collectionId={photo.collectionId}
                                     url={photo.photo_link}
-                                    title={photo.title}
-                                    likes={photo.likes}     
+                                    title={photo.title}     
                                 >
                                 </PhotoListItem>
                             ))}

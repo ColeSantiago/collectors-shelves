@@ -31,7 +31,6 @@ class Collection extends Component {
 			keywords: [],
 			photos: [],
 			editTitle: "",
-			editLikes: "",
 			user: [],
 			currentUser: [],
 			open: false,
@@ -142,7 +141,7 @@ class Collection extends Component {
 					<p>Drop an image or click select a file to upload. </p>
 				</Dropzone>
 			) : (
-					null
+	                null
 				)}
 				<div className="collections">
 	                {this.state.photos.length ? (
@@ -152,8 +151,7 @@ class Collection extends Component {
 	                                key={photo.id}
 	                                id={photo.id} 
 	                                url={photo.photo_link}
-	                                title={photo.title}
-	                                likes={photo.likes}     
+	                                title={photo.title}     
 	                            >
 	                            {this.state.isUser ? (
 	                            	<div>
