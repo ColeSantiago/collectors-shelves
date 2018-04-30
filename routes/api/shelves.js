@@ -6,10 +6,13 @@ const bcrypt = require("bcrypt");
 const cheerio = require("cheerio");
 const saltRounds = 10;
 
+// this route looks crazy but it is just creating the user, and creating starter friends, collections,
+// photos, and notifications for the user
 router.post("/signup", (req, res) => {
     const newUser = req.body;
     bcrypt.hash(newUser.password, saltRounds, function(err, hash) {
         newUser.password = hash;
+        // creating the user
         models.user.create({
             first_name: newUser.first_name,
             last_name: newUser.last_name,
@@ -18,35 +21,42 @@ router.post("/signup", (req, res) => {
             username: newUser.username,
             password: newUser.password,
         }).then(function(result){
+            // creating a favorite things collection
             models.user_collection.create({
                 userId: result.dataValues.id,
                 title: "My Favorite Things That I Own",
                 description: "Load your favorites here!",
             }).then(function(favCollectionResult) {
+                // creating a things i want collection
                 models.user_collection.create({
                     userId: result.dataValues.id,
                     title: "Things I Want",
                     description: "Put things you want to own here!",
                 }).then(function(wantCollectionResult) {
+                    // creating a temp photo entry for the want collection we just made
                     models.collection_photos.create({
                         collectionId: wantCollectionResult.dataValues.id,
                         userCollectionId: wantCollectionResult.dataValues.id, 
                     })
                     .then(function(wantCollectionPhotoResult) {
                         models.collection_photos.create({
+                            // creating a temp photo entry for the favorite collection we just made
                             collectionId: favCollectionResult.dataValues.id,
                             userCollectionId: favCollectionResult.dataValues.id,  
                         })
                         .then(function(favCollectionPhotoResult) {
+                            // creating a temp photo friend
                             models.user_friends.create({
                                 userId: result.dataValues.id
                             })
                             .then(function(friendResult) {
+                                // creating a welcome message for the notification area
                                 models.user_notifications.create({
                                     userId: result.dataValues.id,
                                     message: "Welcome to collectorshelves.com!"
                                 })
                                 .then(function(notificationResult) {
+                                    // sends a welcome email to the email provided
                                     sendEmail(newUser);  
                                 }).catch(function(err) {
                                     console.log(err);
@@ -61,7 +71,7 @@ router.post("/signup", (req, res) => {
     });
 });  
 
-//SIGNIN
+//Sign in route
 router.post("/signin", function(req, res) {
     const loginUser = req.body;
     let reqPassword = req.body.password;
@@ -71,17 +81,20 @@ router.post("/signin", function(req, res) {
             username: reqUserName
         }
     }).then(function(dbUser) {
+        // finding the user and checking the password
         bcrypt.compare(reqPassword, dbUser.password, function(err, result) {
             if(result) {
                 console.log("passwords match");
                 req.mySession.user = dbUser;
+                // creating there status to be online
                     models.user_status.create({
                         login_status: true,
                         userId : dbUser.id
                     }).then(function(status){
                         console.log("You are online!");
                         res.json(status);
-                    }); 
+                    });
+            // if the passwords do not match 
             } else {
                 alert("We cannot find either you Username or Password");
                 res.json(err);
@@ -92,6 +105,7 @@ router.post("/signin", function(req, res) {
     });
 }); 
 
+// sign out route to update/destory the users online status
 router.post("/signout", function(req,res){
     console.log("Signing out User", req.body.userId); 
     
@@ -104,15 +118,19 @@ router.post("/signout", function(req,res){
     });     
 });
 
+// Another crazy looking route, but this is just finding the current user, scraping articles about
+// action figures, and also displaying all of the uploads to the dashboard
 router.get("/dashboard", function(req, res) {
 	if (req.mySession && req.mySession.user) {
 		let loggedInUser = req.mySession.user; 
-	    res.locals.user = loggedInUser;		
+	    res.locals.user = loggedInUser;
+        // finding the user
 	    models.user.findAll({
 		    where: {
 		        id: loggedInUser.id
 		    }        
 		}).then(function(results) {
+            // scrapeing the articles saving them in the database, then displaying them
             axios.get("http://news.toyark.com/").then(function(response) {
                 let $ = cheerio.load(response.data);
                 let result = {};
@@ -133,12 +151,14 @@ router.get("/dashboard", function(req, res) {
                             ]
                         })
                         .then(function(articleResults) {
+                            // displaying all of the photos that have been uploaded
                             models.collection_photos.findAll({
                                 order: [
                                     ['id', 'DESC']
                                 ]
                             })
                             .then(function(photoResults) {
+                                // sending to client side
                                 res.json({
                                     user: results[0].dataValues, 
                                     articles: articleResults, 
@@ -153,7 +173,7 @@ router.get("/dashboard", function(req, res) {
     } 
 });
 
-
+// This route updates the users bio and photo if they choose to do so
 router.post("/profile", function(req, res) {
     let loggedInUser = req.mySession.user;
     models.user.update({
@@ -165,12 +185,18 @@ router.post("/profile", function(req, res) {
         }
     })
     .then(function(results) {
+        // sending to client side
         res.json(results)
     })
 });
 
+// Yet another crazy route. This one loads all of the users profiles
+// It is using parameters so everyone's profile can be viewed, but it also passes through the 
+// current users info so the client side can tell who is looking at what profile by comparing 
+// the info
 router.get("/profile/:username/:id", function(req, res) {
     let loggedInUser = req.mySession.user;
+    // finding the user, their collections, friends, and notifications
     models.user.findAll({
         where: {id: req.params.id},
         include: [
@@ -195,10 +221,12 @@ router.get("/profile/:username/:id", function(req, res) {
         ]
     })
     .then(function(results) {
+        // finding the looged in users
         models.user.findAll({
             where: {id: loggedInUser.id}
         })
         .then(function(currentUserResults) {
+            // sending to client side
             res.json({
                 user: results[0].dataValues, 
                 collection: results[0].dataValues.user_collections, 
@@ -210,6 +238,7 @@ router.get("/profile/:username/:id", function(req, res) {
     })
 });
 
+// Creates new collections
 router.post("/addcollection", function(req, res) {
     models.user_collection.create({
         userId: req.body.userId,
@@ -217,6 +246,7 @@ router.post("/addcollection", function(req, res) {
         description: req.body.description
     })
     .then(function(results) {
+        // creates a temp photo entry
         models.collection_photos.create({
             collectionId: results.dataValues.id,
             userCollectionId: results.dataValues.id,
@@ -225,8 +255,12 @@ router.post("/addcollection", function(req, res) {
     })
 });
 
+// the last crazy route i promise
+// this one finds the current collection with the parameters, along with its photos,
+// and the user it belongs to as well as the current user
 router.get("/collection/:id", function(req, res) {
     let loggedInUser = req.mySession.user;
+    // finding the collection with its photos
     models.user_collection.findAll({
         where: {
             id: req.params.id,
@@ -243,14 +277,17 @@ router.get("/collection/:id", function(req, res) {
         ]
     })
     .then(function(results) {
+        // finding the user the collection belongs to
         models.user.findAll({
             where: {id: results[0].dataValues.userId}
         })
         .then(function(userResults) {
+            // finding the current user
             models.user.findAll({
                 where: {id: loggedInUser.id}
             })
             .then(function(currentUserResults) {
+                // sending to client side
                 res.json({
                     collectionInfo: results[0].dataValues, 
                     photos: results[0].collection_photos, 
@@ -262,6 +299,7 @@ router.get("/collection/:id", function(req, res) {
     })
 });
 
+// deletes collections with the id
 router.post("/deletecollection", function(req, res) {
     models.user_collection.destroy({
         where: {id: req.body.id}
@@ -271,6 +309,7 @@ router.post("/deletecollection", function(req, res) {
     })
 })
 
+// saves all of the photo data in the database
 router.post("/photoupload", function(req, res) {
     models.collection_photos.create({
         collectionId: req.body.collectionId,
@@ -283,6 +322,7 @@ router.post("/photoupload", function(req, res) {
     })
 });
 
+// deletes individual photos
 router.post("/photodelete", function(req, res) {
     models.collection_photos.destroy({
         where: {
@@ -294,6 +334,8 @@ router.post("/photodelete", function(req, res) {
     })
 });
 
+// this route brings the user to the page to edit the photo they choose using
+// the parameter
 router.get("/editphoto/:id", function(req, res) {
     models.collection_photos.findOne({
         where: {
@@ -305,6 +347,7 @@ router.get("/editphoto/:id", function(req, res) {
     })
 });
 
+// updates the title of the specific photo
 router.post("/edittitle", function(req, res) {
     models.collection_photos.update({
         title: req.body.title
@@ -316,14 +359,17 @@ router.post("/edittitle", function(req, res) {
     })
 });
 
+// this route handles the clap funtionailty
 router.post("/addclap", function(req, res) {
     let loggedInUser = req.mySession.user;
+    // finds the user thats been applauded and increments their claps by 1
     models.user.update({
         claps: models.sequelize.literal('claps + 1')
     }, {
         where: {id: req.body.id}
     })
     .then(function(result) {
+        // creates the notification for the user
         models.user_notifications.create({
             userId: req.body.id, 
             friendId: loggedInUser.id,
@@ -336,6 +382,7 @@ router.post("/addclap", function(req, res) {
     })
 });
 
+// lets the users add each other
 router.post("/addfriend", function(req, res) {
     let loggedInUser = req.mySession.user;
     models.user_friends.create({
@@ -344,6 +391,7 @@ router.post("/addfriend", function(req, res) {
         username: req.body.username
     })
     .then(function(result) {
+        // creates the notification for the user
         models.user_notifications.create({
             userId: req.body.friendId, 
             friendId: loggedInUser.id,
@@ -356,6 +404,7 @@ router.post("/addfriend", function(req, res) {
     })
 });
 
+// allows the user to unfriend someone
 router.post("/unfriend", function(req, res) {
     let loggedInUser = req.mySession.user;
     models.user_friends.destroy({
@@ -369,7 +418,7 @@ router.post("/unfriend", function(req, res) {
     })
 })
 
-
+// function that sends the email to the created users
 function sendEmail(newUser){
     console.log(newUser);
 

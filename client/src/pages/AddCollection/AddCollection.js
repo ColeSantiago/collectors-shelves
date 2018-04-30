@@ -4,6 +4,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import API from "../../utils/API";
 
+// the add collection page
 class AddCollection extends Component {
 	state = {
 		user: [],
@@ -15,6 +16,7 @@ class AddCollection extends Component {
   		this.currentUser();
   	};		
 
+  	// get the current user
     currentUser = () => {
         API.getUserAndActivity()
         .then(res => {
@@ -23,6 +25,7 @@ class AddCollection extends Component {
         .catch(err => console.log(err));
     };
 
+    // handles the form input
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
@@ -30,8 +33,8 @@ class AddCollection extends Component {
         });
     };
 
-    handleFormSubmit = event => {
-        
+    // handles the form submit to create a collection
+    handleFormSubmit = event => { 
         if (this.state.title.length) {
           API.createCollection({
             userId: this.state.user.id,

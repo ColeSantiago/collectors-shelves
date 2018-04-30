@@ -1,12 +1,17 @@
 import React, { Component } from "react";
+import {withRouter} from 'react-router';
+import { Link } from "react-router-dom";
+
 import API from "../../utils/API";
+
+// components
 import Wrapper from "../../components/Wrapper";
 import Nav from "../../components/Nav";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { Link } from "react-router-dom";
 import { List, ListItem } from "../../components/ArticleList";
 import { PhotoList, PhotoListItem } from "../../components/PhotoListDashboard";
-import {withRouter} from 'react-router';
+
+// material ui
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class Dashboard extends Component {
 	state = {
@@ -20,6 +25,7 @@ class Dashboard extends Component {
   		this.getcurrentUserAndActivity();
   	};		
 
+    // gets the current user, articles, and all uploads
   	getcurrentUserAndActivity = () => {
   		API.getUserAndActivity()
     	.then(res => {

@@ -1,13 +1,18 @@
 import React, { Component } from "react";
-import Dropzone from "react-dropzone";
-import request from "superagent";
-import API from "../../utils/API";
-import { PhotoList, PhotoListItem } from "../../components/PhotoListCollection";
-import Wrapper from "../../components/Wrapper";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import {withRouter} from "react-router";
+import Dropzone from "react-dropzone";
+import request from "superagent";
+
+import API from "../../utils/API";
+
+// components
+import { PhotoList, PhotoListItem } from "../../components/PhotoListCollection";
+import Wrapper from "../../components/Wrapper";
 import DeletePhotoBtn from "../../components/DeletePhotoBtn";
+
+// material ui
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import SvgIcon from 'material-ui/SvgIcon';
 import {blue500, red500} from 'material-ui/styles/colors';
 import Snackbar from 'material-ui/Snackbar';
@@ -18,6 +23,7 @@ const HomeIcon = (props) => (
   </SvgIcon>
 );
 
+// cloudinary info
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
 
@@ -42,6 +48,7 @@ class Collection extends Component {
 		this.getCollection();
 	};
 
+	// getting the current collection
 	getCollection = () => {
 		API.loadCollection(this.props.match.params.id)
 		.then(res =>  {
@@ -56,6 +63,7 @@ class Collection extends Component {
 		.catch(err => console.log(err));
 	};
 
+	// checking if the user viewing the page is the onwer of the collection
 	userSpecific = () => {
 		if ( this.state.user.id === this.state.currentUser.id) {
 			this.setState({isUser: true})
@@ -64,6 +72,7 @@ class Collection extends Component {
 		}
 	};
 
+	// deletes photos
 	deletePhoto = id => {
 		let photoId = {
 			id: id
@@ -74,18 +83,21 @@ class Collection extends Component {
 	    this.getCollection();
 	  };
 
+	// snackbar function
 	handleClick = () => {
         this.setState({
           open: true,
         });
     };
 
+    // snackbar function
     handleRequestClose = () => {
         this.setState({
           open: false,
         });
     };
 
+    // uploads photos
 	onImageDrop(files) {
 		this.setState({
 			uploadedFile: files[0]
@@ -93,6 +105,7 @@ class Collection extends Component {
 		this.handleImageUpload(files[0]);
 	};
 
+	// uploads photos
 	handleImageUpload(file) {
 		let upload = request.post(CLOUDINARY_UPLOAD_URL)
 							.field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
@@ -126,54 +139,51 @@ class Collection extends Component {
 						<HomeIcon color={red500} hoverColor={blue500} />
 	    			</Link>
     			</MuiThemeProvider>
-
 				<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
 					{this.state.user.username}
 				</Link>
-			<h1>{this.state.collectionInfo.title}</h1>
-			<h2>{this.state.collectionInfo.description}</h2>
-			{this.state.isUser ? (
-				<Dropzone
-					multiple={false}
-					accept="image/*"
-					onDrop={this.onImageDrop.bind(this)}
-				>
-					<p>Drop an image or click select a file to upload. </p>
-				</Dropzone>
-			) : (
-	                null
-				)}
-				<div className="collections">
-	                {this.state.photos.length ? (
-	                    <PhotoList>
-	                        {this.state.photos.map(photo => (
-	                            <PhotoListItem 
-	                                key={photo.id}
-	                                id={photo.id} 
-	                                url={photo.photo_link}
-	                                title={photo.title}     
-	                            >
-	                            {this.state.isUser ? (
-	                            	<div>
-	       								
-	                            		<Link to={`/editphoto/${photo.id}`}>Edit Photo</Link>
-	                            		<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
-	                            	</div>
-	                            	) : (
-	                            			null
-										)}
-	                            </PhotoListItem>
-	                        ))}
-
-	                    </PhotoList>
-	                ) : (
-	                <h3>There are no photos here yet!</h3>
-	                )}
-	            </div>
+				<h1>{this.state.collectionInfo.title}</h1>
+				<h2>{this.state.collectionInfo.description}</h2>
+				{this.state.isUser ? (
+					<Dropzone
+						multiple={false}
+						accept="image/*"
+						onDrop={this.onImageDrop.bind(this)}
+					>
+						<p>Drop an image or click select a file to upload. </p>
+					</Dropzone>
+				) : (
+		                null
+					)}
+					<div className="collections">
+		                {this.state.photos.length ? (
+		                    <PhotoList>
+		                        {this.state.photos.map(photo => (
+		                            <PhotoListItem 
+		                                key={photo.id}
+		                                id={photo.id} 
+		                                url={photo.photo_link}
+		                                title={photo.title}     
+		                            >
+		                            {this.state.isUser ? (
+		                            	<div>
+		                            		<Link to={`/editphoto/${photo.id}`}>Edit Photo</Link>
+		                            		<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
+		                            	</div>
+		                            	) : (
+		                            			null
+											)}
+		                            </PhotoListItem>
+		                        ))}
+		                    </PhotoList>
+		                ) : (
+		                <h3>There are no photos here yet!</h3>
+		                )}
+		            </div>
 		        <MuiThemeProvider>
 	                <Snackbar
 	                  open={this.state.open}
-	                  message="Photo Uploaded"
+	                  message="Photo Uploaded, give it a second"
 	                  autoHideDuration={4000}
 	                  onRequestClose={this.handleRequestClose}
 	                />

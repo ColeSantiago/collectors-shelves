@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// directs the client side info and functions to the server
 export default {
   createUser: function(newUserData) {
     return axios.post("/api/shelves/signup", newUserData);

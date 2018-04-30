@@ -1,26 +1,30 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { Redirect, withRouter } from "react-router";
-import { Input, SignInBtn } from "./SignInForm";
-import Footer from "./components/Footer";
-import API from "./API";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
+import API from "./API";
+
+// components
+import { Input, SignInBtn } from "./SignInForm";
+import Footer from "./components/Footer";
+
+// pages
 import AddCollection from "./pages/AddCollection";
 import Collection from "./pages/Collection";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-// import Search from "./pages/Search";
 import SignUp from "./pages/SignUp";
-// import Footer from "./components/Footer";
 import EditPhoto from "./pages/EditPhoto";
 import EditProfile from "./pages/EditProfile";
+// import Search from "./pages/Search";
 
+// the sign out button
 const AuthButton = withRouter(({ history }) => (
-  fakeAuth.isAuthenticated ? (
+  Auth.isAuthenticated ? (
     <p>
       Welcome! <button onClick={() => {
-        fakeAuth.signout(() => history.push('/'))
+        Auth.signout(() => history.push('/'))
       }}>Sign out</button>
     </p>
   ) : (
@@ -28,28 +32,31 @@ const AuthButton = withRouter(({ history }) => (
   )
 ));
 
-const fakeAuth = {
+// checks isAuthenticated, updates session storage
+const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
     this.isAuthenticated = true
-    setTimeout(cb, 100) // fake async
+    setTimeout(cb, 100) // async
     sessionStorage.setItem('isAuthenticated', 'true');
   },
   signout(cb) {
     this.isAuthenticated = false
-    setTimeout(cb, 100) // fake async
+    setTimeout(cb, 100) // async
     sessionStorage.setItem('isAuthenticated', 'false');
   }
 }
 
+// protected route for non logged in users
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
-    fakeAuth.isAuthenticated === true
+    Auth.isAuthenticated === true
       ? <Component {...props} />
       : <Redirect to='/' />
   )} />
 )
 
+// the sign in page
 class SignIn extends Component {
     state = {
         userName: "",
@@ -61,7 +68,7 @@ class SignIn extends Component {
     componentDidMount() {
       let isLoggedIn = sessionStorage.getItem('isAuthenticated');
       if (isLoggedIn === 'true') {
-        fakeAuth.authenticate(() => {
+        Auth.authenticate(() => {
           this.setState(() => ({
             redirectToReferrer: true
           }))
@@ -69,14 +76,16 @@ class SignIn extends Component {
       }
     };
 
+    // login function
     login = () => {
-        fakeAuth.authenticate(() => {
+        Auth.authenticate(() => {
           this.setState(() => ({
             redirectToReferrer: true
           }))
         })
     };
 
+    // handles form input
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
@@ -84,6 +93,7 @@ class SignIn extends Component {
         });
     };
 
+    // form submit to login user and set the states to true
     handleFormSubmit(event) {
         event.preventDefault();
         API.loginUser({
@@ -92,7 +102,7 @@ class SignIn extends Component {
         })
         .then(res => {
             if(res.data.login_status === true) {
-                fakeAuth.authenticate(() => {
+                Auth.authenticate(() => {
                     this.setState(() => ({
                         redirectToReferrer: true
                     }))
@@ -103,18 +113,6 @@ class SignIn extends Component {
     };
 
     render() {
-
-        // const { from } = this.props.location.state || { from: { pathname: '/' } }
-        // const { redirectToReferrer } = this.state
-
-        // if (redirectToReferrer === true) {
-        //   <Redirect to={"/profile"} />
-        // }
-
-        // if (redirectToReferrer === false) {
-        //   <Redirect to={"/"} />
-        // }
-
         return(
             <div>
                 <MuiThemeProvider>
@@ -156,6 +154,7 @@ class SignIn extends Component {
     }
 }
 
+// all of the routes and protected routes, renders the pages
 const App = () => (
   <Router>
     <div>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Input, SignUpBtn } from "../../components/SignUpForm";
-import API from "../../utils/API";
 import { Link } from "react-router-dom";
+import API from "../../utils/API";
+import { Input, SignUpBtn } from "../../components/SignUpForm";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class SignUp extends Component {
@@ -14,6 +14,7 @@ class SignUp extends Component {
     confirmPassword: "",
   };
 
+  // handles form input
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -21,6 +22,7 @@ class SignUp extends Component {
     });
   };
 
+  // handles form submit to create a user
   handleFormSubmit = event => {
     if (this.state.password === this.state.confirmPassword) {
       API.createUser({

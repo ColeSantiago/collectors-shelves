@@ -1,16 +1,21 @@
 import React, { Component } from "react";
-import API from "../../utils/API";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
+import {withRouter} from "react-router";
+import Clap from "react-clap-button";
+
+import API from "../../utils/API";
+import Placeholder from "./placeholder.png";
+
+// components
 import { List, ListItem } from "../../components/CollectionList";
 import { NotificationList, NotificationListItem } from "../../components/NotificationList";
 import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
-import {withRouter} from "react-router";
 import AddFriendBtn from "../../components/AddFriendBtn";
-import Placeholder from "./placeholder.png"
 import Nav from "../../components/Nav";
-import Clap from "react-clap-button";
+
+// material ui
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class Dashboard extends Component {
 	state = {
@@ -28,6 +33,8 @@ class Dashboard extends Component {
   		this.getUserAndCollections();
   	};	
 
+    // gets the user's profile, with their bio, collections, friends, and notification, as well as the current
+    // logged user
     getUserAndCollections = () => {
         API.getUserProfile(this.props.match.params.username, this.props.match.params.id)
         .then(res => {
@@ -44,6 +51,7 @@ class Dashboard extends Component {
         .catch(err => console.log(err));
     };
 
+    // checking if the user viewing the page is the onwer of the collection
     userSpecific = () => {
         if ( this.state.user.id === this.state.currentUser.id) {
             this.setState({isUser: true})
@@ -52,6 +60,7 @@ class Dashboard extends Component {
         }
     };
 
+    // deletes collections
     deleteCollection = id => {
         API.deleteCollection({
             id: id
@@ -61,6 +70,7 @@ class Dashboard extends Component {
         this.getUserAndCollections();
     };
 
+    // adds friends
     addFriend(id, username, friendUsername) {
         API.addFriend({
             friendId: id,
@@ -71,6 +81,7 @@ class Dashboard extends Component {
         .catch(err => console.log(err));
     };
 
+    // deletes friends
     deleteFriend = id => {
         API.deleteFriend({
             friendId: id
@@ -80,6 +91,7 @@ class Dashboard extends Component {
         this.getUserAndCollections();
     }
 
+    // handles the clap function
     handleClap(userId, username) {
         if (this.state.isClicked === false) {
             this.setState({isClicked: true})
@@ -121,10 +133,10 @@ class Dashboard extends Component {
                     <div>
                         <AddFriendBtn 
                             onClick={() => this.addFriend(
-                                                this.props.match.params.id, 
-                                                this.props.match.params.username,
-                                                this.state.currentUser.username
-                                            )} 
+                                this.props.match.params.id, 
+                                this.props.match.params.username,
+                                this.state.currentUser.username
+                            )} 
                         />
                         <div onClick={() => this.handleClap(this.state.user.id, this.state.currentUser.username)}>
                             <Clap
@@ -158,11 +170,10 @@ class Dashboard extends Component {
                                         )}
                                 </ListItem>
                             ))}
-
                         </List>
                     ) : (
-                    <h3>Click the button above to start sharing your collections!</h3>
-                    )}
+                            <h3>Click the button above to start sharing your collections!</h3>
+                        )}
                 </div>
                 {this.state.isUser ? (
                     <div>
@@ -180,8 +191,8 @@ class Dashboard extends Component {
                                         ))}
                                     </NotificationList>
                             ) : (
-                            <h3>You don't have any notifications yet</h3>
-                            )}
+                                    <h3>You don't have any notifications yet</h3>
+                                )}
                         </div>
                         <Link to="/addcollection">Add a new Collection</Link>
                     </div>
@@ -197,7 +208,6 @@ class Dashboard extends Component {
                                     id={collection.id} 
                                     title={collection.title} 
                                     description={collection.description}
-                                
                                 >
                                     {this.state.isUser ? (
                                         <DeleteCollectBtn onClick={() => this.deleteCollection(collection.id)} />
@@ -206,11 +216,10 @@ class Dashboard extends Component {
                                         )}
                                 </ListItem>
                             ))}
-
                         </List>
                 ) : (
-                <h3>Click the button above to start sharing your collections!</h3>
-                )}
+                        <h3>Click the button above to start sharing your collections!</h3>
+                    )}
             </div>
           </Wrapper>
 		);

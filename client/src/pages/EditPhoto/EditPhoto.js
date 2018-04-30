@@ -1,14 +1,19 @@
 import React, { Component } from "react";
+// import { Link } from "react-router-dom";
+import {withRouter} from 'react-router';
+
 import API from "../../utils/API";
+import "./EditPhoto.css";
+
+// components
 import Wrapper from "../../components/Wrapper";
 import Nav from "../../components/Nav";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-// import { Link } from "react-router-dom";
-// import { List, ListItem } from "../../components/List";
-import {withRouter} from 'react-router';
 import { Input, EditPhotoBtn } from "../../components/EditPhotoForm";
+
+// material ui
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Snackbar from 'material-ui/Snackbar';
-import "./EditPhoto.css";
+
 
 class EditPhoto extends Component {
 	state = {
@@ -21,6 +26,7 @@ class EditPhoto extends Component {
         this.loadPhoto();
     };
 
+    // loads current photo
     loadPhoto = () => {
         API.loadPhoto(this.props.match.params.id)
         .then(res => {
@@ -31,18 +37,21 @@ class EditPhoto extends Component {
         .catch(err => console.log(err));
     };
 
+    // snackbar function
     handleClick = () => {
         this.setState({
           open: true,
         });
     };
 
+    // snackbar function
     handleRequestClose = () => {
         this.setState({
           open: false,
         });
     };
 
+    // handles form input
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
@@ -50,6 +59,7 @@ class EditPhoto extends Component {
         });
     };
 
+    // hanldes form submit to update the photo title
     handleFormSubmit = event => {
         event.preventDefault();
         if (this.state.password === this.state.confirmPassword) {
@@ -79,7 +89,7 @@ class EditPhoto extends Component {
                         name="editTitle"
                         floatingLabelText="Photo Title"
                     />
-                        <EditPhotoBtn onClick={this.handleFormSubmit}/>
+                    <EditPhotoBtn onClick={this.handleFormSubmit}/>
                 </form>
             </MuiThemeProvider>
             <MuiThemeProvider>

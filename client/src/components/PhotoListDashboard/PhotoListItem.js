@@ -10,7 +10,6 @@ export const PhotoListItem = props => (
 	   {props.children}
    </Link>
   </li>
-
 );
 
 

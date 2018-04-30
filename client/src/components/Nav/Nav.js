@@ -18,7 +18,6 @@ const Nav = props => (
     	<Link to={`/profile/${props.username}/${props.id}`}>
 			Profile
     	</Link>
-
 	</nav>
 ); 
 
