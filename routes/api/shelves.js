@@ -336,17 +336,6 @@ router.post("/addclap", function(req, res) {
     })
 });
 
-router.post("/subtractlike", function(req, res) {
-    models.collection_photos.update({
-        likes: - 1
-    }, {
-        where: {id: req.body.id}
-    })
-    .then(function(result) {
-        console.log(result);
-    })
-});
-
 router.post("/addfriend", function(req, res) {
     let loggedInUser = req.mySession.user;
     models.user_friends.create({
@@ -355,7 +344,15 @@ router.post("/addfriend", function(req, res) {
         username: req.body.username
     })
     .then(function(result) {
-        console.log('friend added');
+        models.user_notifications.create({
+            userId: req.body.friendId, 
+            friendId: loggedInUser.id,
+            friendUsername: req.body.friendUsername,
+            message: `${req.body.friendUsername} added you!`
+        })
+        .then(function(subResult) {
+            console.log('friend added');
+        })   
     })
 });
 

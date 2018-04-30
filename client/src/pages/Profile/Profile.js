@@ -61,10 +61,11 @@ class Dashboard extends Component {
         this.getUserAndCollections();
     };
 
-    addFriend(id, username) {
+    addFriend(id, username, friendUsername) {
         API.addFriend({
             friendId: id,
-            username: username
+            username: username,
+            friendUsername: friendUsername
         })
         .then(res => console.log('friend added'))
         .catch(err => console.log(err));
@@ -119,7 +120,11 @@ class Dashboard extends Component {
                 {!this.state.isUser ? (
                     <div>
                         <AddFriendBtn 
-                            onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
+                            onClick={() => this.addFriend(
+                                                this.props.match.params.id, 
+                                                this.props.match.params.username,
+                                                this.state.currentUser.username
+                                            )} 
                         />
                         <div onClick={() => this.handleClap(this.state.user.id, this.state.currentUser.username)}>
                             <Clap
