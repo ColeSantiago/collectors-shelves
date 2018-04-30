@@ -7,12 +7,14 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 // import { List, ListItem } from "../../components/List";
 import {withRouter} from 'react-router';
 import { Input, EditPhotoBtn } from "../../components/EditPhotoForm";
+import Snackbar from 'material-ui/Snackbar';
 import "./EditPhoto.css";
 
 class EditPhoto extends Component {
 	state = {
         photo: [],
-        editTitle: ""
+        editTitle: "",
+        open: false
 	};
 
     componentWillMount() {
@@ -29,6 +31,18 @@ class EditPhoto extends Component {
         .catch(err => console.log(err));
     };
 
+    handleClick = () => {
+        this.setState({
+          open: true,
+        });
+    };
+
+    handleRequestClose = () => {
+        this.setState({
+          open: false,
+        });
+    };
+
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
@@ -37,13 +51,16 @@ class EditPhoto extends Component {
     };
 
     handleFormSubmit = event => {
+        event.preventDefault();
         if (this.state.password === this.state.confirmPassword) {
-          API.updatePhoto({
-            title: this.state.editTitle,
-            id: this.state.photo.id
-          })
-          .then(res => console.log('title edited'))
-          .catch(err => console.log(err));
+            this.handleClick();
+            API.updatePhoto({
+                title: this.state.editTitle,
+                id: this.state.photo.id
+            })
+            .then(res => console.log('title edited'))
+            .catch(err => console.log(err));
+            this.setState({editTitle: ""})
         }
     };
 	
@@ -62,8 +79,16 @@ class EditPhoto extends Component {
                         name="editTitle"
                         floatingLabelText="Photo Title"
                     />
-                        <EditPhotoBtn onClick={this.handleFormSubmit} />
+                        <EditPhotoBtn onClick={this.handleFormSubmit}/>
                 </form>
+            </MuiThemeProvider>
+            <MuiThemeProvider>
+                <Snackbar
+                  open={this.state.open}
+                  message="Photo Edited"
+                  autoHideDuration={4000}
+                  onRequestClose={this.handleRequestClose}
+                />
             </MuiThemeProvider>
 		  </Wrapper>
 		);

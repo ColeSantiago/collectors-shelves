@@ -5,7 +5,7 @@ import request from "superagent";
 import Wrapper from "../../components/Wrapper";
 import Nav from "../../components/Nav";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import { List, ListItem } from "../../components/List";
 import {withRouter} from 'react-router';
 import { Input, UserDetailsBtn } from "../../components/UserDetailsForm";
@@ -48,14 +48,13 @@ class EditPhoto extends Component {
     };
 
     handleFormSubmit = event => {
-        // event.preventDefault();
+        event.preventDefault();
           API.updateBio({
             bio: this.state.editBio,
             photo: this.state.uploadedFileCloudinaryUrl
           })
           .then(res => {
-            console.log(res);
-            this.props.history.push("/profile")
+            console.log("updated");
         })
           .catch(err => console.log(err));
         
@@ -116,9 +115,11 @@ class EditPhoto extends Component {
                             name="editBio"
                             hintText="Update Your Bio Here"
                         />
-                        <UserDetailsBtn onClick={this.handleFormSubmit}>
-                            Update
-                        </UserDetailsBtn>
+                        <Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
+                            <UserDetailsBtn onClick={this.handleFormSubmit}>
+                                Update
+                            </UserDetailsBtn>
+                        </Link>
                     </form>
                 </MuiThemeProvider>
 		  </Wrapper>

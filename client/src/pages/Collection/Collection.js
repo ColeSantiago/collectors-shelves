@@ -9,13 +9,14 @@ import { Link } from "react-router-dom";
 import {withRouter} from "react-router";
 import DeletePhotoBtn from "../../components/DeletePhotoBtn";
 // import LikeBtn from "../../components/LikeBtn";
-import Checkbox from 'material-ui/Checkbox';
-import ActionFavorite from 'material-ui/svg-icons/action/favorite';
-import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+// import Checkbox from 'material-ui/Checkbox';
+// import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+// import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 // import Visibility from 'material-ui/svg-icons/action/visibility';
 // import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import SvgIcon from 'material-ui/SvgIcon';
 import {blue500, red500} from 'material-ui/styles/colors';
+import Snackbar from 'material-ui/Snackbar';
 
 const HomeIcon = (props) => (
   <SvgIcon {...props}>
@@ -26,14 +27,14 @@ const HomeIcon = (props) => (
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
 
-const styles = {
-  block: {
-    maxWidth: 250,
-  },
-  checkbox: {
-    marginBottom: 16,
-  },
-};
+// const styles = {
+//   block: {
+//     maxWidth: 250,
+//   },
+//   checkbox: {
+//     marginBottom: 16,
+//   },
+// };
 
 class Collection extends Component {
 	constructor(props) {
@@ -47,7 +48,10 @@ class Collection extends Component {
 			editTitle: "",
 			editLikes: "",
 			checked: false,
-			user: []
+			user: [],
+			currentUser: [],
+			open: false,
+			isUser: false
 		};
 	};
 
@@ -61,10 +65,24 @@ class Collection extends Component {
 			this.setState({
 			collectionInfo: res.data.collectionInfo,
 			photos: res.data.photos,
-			user: res.data.user[0]
+			user: res.data.user[0],
+			currentUser: res.data.currentUser[0]
 			})
+			this.userSpecific();
 		})
 		.catch(err => console.log(err));
+	};
+
+	userSpecific = () => {
+		console.log(this.state.user.id)
+		console.log(this.state.currentUser.id)
+		if ( this.state.user.id === this.state.currentUser.id) {
+			this.setState({isUser: true})
+			console.log(this.state.isUser)
+		} else {
+			this.setState({isUser: false})
+			console.log(this.state.isUser)
+		}
 	};
 
 	deletePhoto = id => {
@@ -74,31 +92,44 @@ class Collection extends Component {
 	    API.deletePhoto(photoId)
 	    .then(res => this.getCollection())
 	    .catch(err => console.log(err));
+	    this.getCollection();
 	  };
 
-	  updateCheck() {
+	handleClick = () => {
+        this.setState({
+          open: true,
+        });
+    };
+
+    handleRequestClose = () => {
+        this.setState({
+          open: false,
+        });
+    };
+
+	updateCheck() {
 	    this.setState((oldState) => {
 	      return {
 	        checked: !oldState.checked,
 	      };
 	    });
-	  };
+	};
 
-	  onCheck(event, isInputChecked) {
+	onCheck(event, isInputChecked) {
 	    if (isInputChecked) {
 	      console.log('liked');
 	    } else {
 	      console.log("unliked");
 	    }
-	  };
+	};
 
-	  onChange(id) {
+	onChange(id) {
 	  	API.addLike({
 	    	id: id
 	    })
 	   .then(res => console.log(res))
 	   .catch(err => console.log(err));
-	  };
+	};
 
 	onImageDrop(files) {
 		this.setState({
@@ -127,6 +158,8 @@ class Collection extends Component {
 				.then(res => console.log(res))
 				.catch(err => console.log(err));
 			}
+			this.handleClick();
+			this.getCollection();
 		});
 	};
 
@@ -144,6 +177,7 @@ class Collection extends Component {
 				</Link>
 			<h1>{this.state.collectionInfo.title}</h1>
 			<h2>{this.state.collectionInfo.description}</h2>
+			
 				<Dropzone
 					multiple={false}
 					accept="image/*"
@@ -151,14 +185,7 @@ class Collection extends Component {
 				>
 					<p>Drop an image or click select a file to upload. </p>
 				</Dropzone>
-				<div>
-					{this.state.uploadedFileCloudinaryUrl === '' ? null :
-						<div>
-							<p>{this.state.uploadedFile.name}</p>
-							<img src={this.state.uploadedFileCloudinaryUrl} alt={this.state.uploadedFile.name}/>
-						</div>
-					}
-				</div>
+		
 				<div className="collections">
 	                {this.state.photos.length ? (
 	                    <PhotoList>
@@ -170,21 +197,14 @@ class Collection extends Component {
 	                                title={photo.title}
 	                                likes={photo.likes}     
 	                            >
-	                            	<MuiThemeProvider>
-	                                  <div style={styles.block}>
-								        <Checkbox
-								          onCheck={this.onCheck}
-								          onChange={this.onChange(photo.id)}
-								          checkedIcon={<ActionFavorite />}
-								          uncheckedIcon={<ActionFavoriteBorder />}
-								          style={styles.checkbox}
-								        />
-								      </div>
-								      </MuiThemeProvider>
-								    
-	                            	<Link to={`/editphoto/${photo.id}`}>Edit Photo</Link>
-
-	                            	<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
+	                            {this.state.isUser ? (
+	                            	<div>
+	                            		<Link to={`/editphoto/${photo.id}`}>Edit Photo</Link>
+	                            		<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
+	                            	</div>
+	                            	) : (
+											null
+										)}
 	                            </PhotoListItem>
 	                        ))}
 
@@ -193,9 +213,30 @@ class Collection extends Component {
 	                <h3>Add some photos!</h3>
 	                )}
 	            </div>
+		        <MuiThemeProvider>
+	                <Snackbar
+	                  open={this.state.open}
+	                  message="Photo Uploaded"
+	                  autoHideDuration={4000}
+	                  onRequestClose={this.handleRequestClose}
+	                />
+	            </MuiThemeProvider>
 			</Wrapper>
 		);
 	}
 }
 
 export default withRouter(Collection);
+
+
+	             //                	<MuiThemeProvider>
+	             //                      <div style={styles.block}>
+								      //   <Checkbox
+								      //     onCheck={this.onCheck}
+								      //     onChange={this.onChange(photo.id)}
+								      //     checkedIcon={<ActionFavorite />}
+								      //     uncheckedIcon={<ActionFavoriteBorder />}
+								      //     style={styles.checkbox}
+								      //   />
+								      // </div>
+								      // </MuiThemeProvider>

@@ -28,8 +28,8 @@ router.post("/signup", (req, res) => {
                     description: "Put things you want to own here!",
                 }).then(function(subsubresult) {
                     models.user_friends.create({
-                        userId: 1,
-                        friendId: result.dataValues.id,
+                        userId: result.dataValues.id,
+                        friendId: 1,
                         username: "colee"
                     })
                     .then(function(subsubsubResult) {
@@ -116,7 +116,11 @@ router.get("/dashboard", function(req, res) {
                             ]
                         })
                         .then(function(articleResults) {
-                            models.collection_photos.findAll({})
+                            models.collection_photos.findAll({
+                                order: [
+                                    ['id', 'DESC']
+                                ]
+                            })
                             .then(function(photoResults) {
                                 res.json({
                                     user: results[0].dataValues, 
@@ -174,7 +178,6 @@ router.get("/profile/:username/:id", function(req, res) {
 });
 
 router.post("/addcollection", function(req, res) {
-    let loggedInUser = req.mySession.user;
     models.user_collection.create({
         userId: req.body.userId,
         title:req.body.title,
@@ -186,6 +189,7 @@ router.post("/addcollection", function(req, res) {
 });
 
 router.get("/collection/:id", function(req, res) {
+    let loggedInUser = req.mySession.user;
     models.user_collection.findOne({
         where: {
             id: req.params.id
@@ -199,12 +203,21 @@ router.get("/collection/:id", function(req, res) {
         ]
     })
     .then(function(results) {
-        console.log(results.dataValues.userId)
         models.user.findAll({
             where: {id: results.dataValues.userId}
         })
         .then(function(userResults) {
-            res.json({collectionInfo: results.dataValues, photos: results.collection_photos, user: userResults});
+            models.user.findAll({
+                where: {id: loggedInUser.id}
+            })
+            .then(function(currentUserResults) {
+                res.json({
+                    collectionInfo: results.dataValues, 
+                    photos: results.collection_photos, 
+                    user: userResults,
+                    currentUser: currentUserResults
+                })
+            });
         })
     })
 });

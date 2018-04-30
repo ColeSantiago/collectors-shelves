@@ -41,6 +41,7 @@ class Dashboard extends Component {
         })
         .then(res => console.log("collection deleted"))
         .catch(err => console.log(err));
+        this.getUserAndCollections();
     };
 
     addFriend(id, username) {
@@ -58,6 +59,7 @@ class Dashboard extends Component {
         })
         .then(res => console.log("unfriended"))
         .catch(err => console.log(err));
+        this.getUserAndCollections();
     }
 	
 	render() {

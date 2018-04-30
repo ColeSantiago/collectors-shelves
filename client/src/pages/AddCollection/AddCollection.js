@@ -47,7 +47,6 @@ class AddCollection extends Component {
 		return (
 			<div>
 				<h1>Describe your collection first, you'll upload your pictures in a second.</h1>
-				{this.state.user.id}
 				<MuiThemeProvider>
 		          <form>
 		              <Input
@@ -62,10 +61,10 @@ class AddCollection extends Component {
 		                    name="description"
 		                    floatingLabelText="Collection Description"
 		                  />
-		                  <Link to="/profile">
+		                  <Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
 		                  	<AddCollectionBtn onClick={this.handleFormSubmit} />
 		                  </Link>
-		                  <Link className="nevermind-link" to="/profile">
+		                  <Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
 		                    Nevermind
 		                  </Link>
 		            </form>

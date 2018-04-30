@@ -97,8 +97,7 @@ class SignIn extends Component {
                         redirectToReferrer: true
                     }))
                 })
-                this.setState({ user: res.data})
-                console.log(this.state.user)      
+                this.setState({ user: res.data})     
         }})
         .catch(err => console.log(err));
     };
