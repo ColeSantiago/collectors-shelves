@@ -4,8 +4,8 @@ import Wrapper from "../../components/Wrapper";
 import Nav from "../../components/Nav";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
-import { List, ListItem } from "../../components/List";
-import { PhotoList, PhotoListItem } from "../../components/PhotoList";
+import { List, ListItem } from "../../components/ArticleList";
+import { PhotoList, PhotoListItem } from "../../components/PhotoListDashboard";
 import {withRouter} from 'react-router';
 
 class Dashboard extends Component {
@@ -35,10 +35,9 @@ class Dashboard extends Component {
 	render() {
 		return (
 		  <Wrapper>
-            <MuiThemeProvider>
-                <Nav />
-            </MuiThemeProvider>
-          		
+                <MuiThemeProvider>
+                    <Nav username={this.state.user.username} id={this.state.user.id}/>
+                </MuiThemeProvider>
             <h1>hey {this.state.user.username}</h1>
           		<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
                     Go To Your Profile

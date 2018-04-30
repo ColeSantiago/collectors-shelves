@@ -14,12 +14,13 @@ const Nav = props => (
 	<nav>
 		<Link className="navbar-link" to="/dashboard">
 			<HomeIcon color={red500} hoverColor={blue500} />
-    </Link>
-    <Link className="navbar-link" to="/profile">
+    	</Link>
+    	<Link to={`/profile/${props.username}/${props.id}`}>
 			Profile
-    </Link>
+    	</Link>
 
 	</nav>
 ); 
 
 export default Nav;
+

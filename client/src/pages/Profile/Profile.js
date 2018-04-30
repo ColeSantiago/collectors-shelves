@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
-import { List, ListItem } from "../../components/List";
+import { List, ListItem } from "../../components/CollectionList";
 import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
 import {withRouter} from "react-router";
 import AddFriendBtn from "../../components/AddFriendBtn";
 import Placeholder from "./placeholder.png"
+import Nav from "../../components/Nav";
 
 class Dashboard extends Component {
 	state = {
@@ -62,9 +63,12 @@ class Dashboard extends Component {
 	render() {
 		return (
             <Wrapper>
-                {this.state.user.photo === null ? <img src={Placeholder} alt="profile picture" /> :
+                <MuiThemeProvider>
+                    <Nav username={this.state.user.username} id={this.state.user.id}/>
+                </MuiThemeProvider>
+                {this.state.user.photo === null ? <img src={Placeholder} alt="profile" /> :
                     <div>
-                        <img src={this.state.user.photo} alt="Actual Profile Picture"/>
+                        <img src={this.state.user.photo} alt="Actual Profile"/>
                     </div>
                 }
 		      <h1>{this.state.user.username}</h1>
@@ -98,9 +102,7 @@ class Dashboard extends Component {
                 </div>
                 <div className="liked-photos">Liked Photos here</div>
                 <div className="notifiction-div">Notifictions here</div>
-            <Link to="/addcollection">
-                Add a new Collection
-            </Link>
+            <Link to="/addcollection">Add a new Collection</Link>
             <div className="collections">
                 {this.state.collections.length ? (
                     <List>

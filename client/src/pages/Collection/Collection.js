@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Dropzone from "react-dropzone";
 import request from "superagent";
 import API from "../../utils/API";
-import { PhotoList, PhotoListItem } from "../../components/PhotoList";
+import { PhotoList, PhotoListItem } from "../../components/PhotoListCollection";
 import Wrapper from "../../components/Wrapper";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
@@ -14,6 +14,14 @@ import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 // import Visibility from 'material-ui/svg-icons/action/visibility';
 // import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import SvgIcon from 'material-ui/SvgIcon';
+import {blue500, red500} from 'material-ui/styles/colors';
+
+const HomeIcon = (props) => (
+  <SvgIcon {...props}>
+    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+  </SvgIcon>
+);
 
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
@@ -125,6 +133,12 @@ class Collection extends Component {
 	render() {
 		return (
 			<Wrapper>
+				<MuiThemeProvider>
+					<Link className="navbar-link" to="/dashboard">
+						<HomeIcon color={red500} hoverColor={blue500} />
+	    			</Link>
+    			</MuiThemeProvider>
+
 				<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
 					{this.state.user.username}
 				</Link>
@@ -167,9 +181,9 @@ class Collection extends Component {
 								        />
 								      </div>
 								      </MuiThemeProvider>
-	                            	<Link to={`/editphoto/${photo.id}`}>
-	                            		<button>Edit Photo</button>
-	                            	</Link>
+								    
+	                            	<Link to={`/editphoto/${photo.id}`}>Edit Photo</Link>
+
 	                            	<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
 	                            </PhotoListItem>
 	                        ))}

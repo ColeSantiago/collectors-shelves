@@ -80,10 +80,6 @@ class EditPhoto extends Component {
                 this.setState({
                     uploadedFileCloudinaryUrl: response.body.secure_url
                 });
-                let photoData = {
-                    photo: response.body.secure_url,
-                    collectionId: this.props.match.params.id
-                }
             }
         });
     };
