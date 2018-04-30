@@ -8,15 +8,10 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import {withRouter} from "react-router";
 import DeletePhotoBtn from "../../components/DeletePhotoBtn";
-// import LikeBtn from "../../components/LikeBtn";
-// import Checkbox from 'material-ui/Checkbox';
-// import ActionFavorite from 'material-ui/svg-icons/action/favorite';
-// import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-// import Visibility from 'material-ui/svg-icons/action/visibility';
-// import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import SvgIcon from 'material-ui/SvgIcon';
 import {blue500, red500} from 'material-ui/styles/colors';
 import Snackbar from 'material-ui/Snackbar';
+import Clap from "react-clap-button";
 
 const HomeIcon = (props) => (
   <SvgIcon {...props}>
@@ -26,15 +21,6 @@ const HomeIcon = (props) => (
 
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
-
-// const styles = {
-//   block: {
-//     maxWidth: 250,
-//   },
-//   checkbox: {
-//     marginBottom: 16,
-//   },
-// };
 
 class Collection extends Component {
 	constructor(props) {
@@ -47,11 +33,11 @@ class Collection extends Component {
 			photos: [],
 			editTitle: "",
 			editLikes: "",
-			checked: false,
 			user: [],
 			currentUser: [],
 			open: false,
-			isUser: false
+			isUser: false,
+			isClicked: false
 		};
 	};
 
@@ -111,20 +97,20 @@ class Collection extends Component {
 	    });
 	};
 
-	onCheck(event, isInputChecked) {
-	    if (isInputChecked) {
-	      console.log('liked');
-	    } else {
-	      console.log("unliked");
-	    }
-	};
-
-	onChange(id) {
-	  	API.addLike({
-	    	id: id
-	    })
-	   .then(res => console.log(res))
-	   .catch(err => console.log(err));
+	handleClap(photoId) {
+		console.log(photoId);
+		if (this.state.isClicked === false) {
+			this.setState({isClicked: true})
+			console.log("liked")
+			API.addLike({
+				id: photoId
+			})
+			.then(res => this.getCollection())
+	    	.catch(err => console.log(err));
+		} else {
+			console.log("disliked")
+			this.setState({isClicked: false})
+		}
 	};
 
 	onImageDrop(files) {
@@ -197,11 +183,22 @@ class Collection extends Component {
 	                            >
 	                            {this.state.isUser ? (
 	                            	<div>
+	       								
 	                            		<Link to={`/editphoto/${photo.id}`}>Edit Photo</Link>
 	                            		<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
 	                            	</div>
 	                            	) : (
-											null
+	                            			<div onClick={() => this.handleClap(photo.id)}>
+												<Clap
+												  count={photo.likes + 1}
+												  countTotal={photo.likes}
+												  isClicked={this.state.isClicked}
+												  maxCount={1}
+												  theme={{
+												    secondaryColor: '#5f27ae'
+												  }}
+												/>
+											</div>
 										)}
 	                            </PhotoListItem>
 	                        ))}
@@ -225,16 +222,3 @@ class Collection extends Component {
 }
 
 export default withRouter(Collection);
-
-
-	             //                	<MuiThemeProvider>
-	             //                      <div style={styles.block}>
-								      //   <Checkbox
-								      //     onCheck={this.onCheck}
-								      //     onChange={this.onChange(photo.id)}
-								      //     checkedIcon={<ActionFavorite />}
-								      //     uncheckedIcon={<ActionFavoriteBorder />}
-								      //     style={styles.checkbox}
-								      //   />
-								      // </div>
-								      // </MuiThemeProvider>

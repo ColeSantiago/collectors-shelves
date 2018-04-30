@@ -40,8 +40,8 @@ export default {
   updatePhoto: function(titleData) {
   	return axios.post("/api/shelves/edittitle", titleData);
   },
-  addLike: function(photoId) {
-  	return axios.post("/api/shelves/addlike", photoId);
+  addLike: function(likeData) {
+  	return axios.post("/api/shelves/addlike", likeData);
   },
   addFriend: function(friendId) {
   	return axios.post("/api/shelves/addfriend", friendId);

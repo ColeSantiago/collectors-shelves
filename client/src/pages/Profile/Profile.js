@@ -40,14 +40,10 @@ class Dashboard extends Component {
     };
 
     userSpecific = () => {
-        console.log(this.state.user.id)
-        console.log(this.state.currentUser.id)
         if ( this.state.user.id === this.state.currentUser.id) {
             this.setState({isUser: true})
-            console.log(this.state.isUser)
         } else {
             this.setState({isUser: false})
-            console.log(this.state.isUser)
         }
     };
 

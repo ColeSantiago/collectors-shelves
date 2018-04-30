@@ -284,13 +284,21 @@ router.post("/edittitle", function(req, res) {
 });
 
 router.post("/addlike", function(req, res) {
+    let loggedInUser = req.mySession.user;
     models.collection_photos.update({
-        likes: + 1
+        likes: models.sequelize.literal('likes + 1')
     }, {
         where: {id: req.body.id}
     })
     .then(function(result) {
-        console.log(result);
+        models.user_likes.create({
+            userId: loggedInUser.id,
+            photoId: req.body.id,
+        })
+        .then(function(subResult) {
+            console.log(result);
+            console.log(subresult);
+        })
     })
 });
 
