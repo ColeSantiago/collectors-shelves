@@ -74,14 +74,10 @@ class Collection extends Component {
 	};
 
 	userSpecific = () => {
-		console.log(this.state.user.id)
-		console.log(this.state.currentUser.id)
 		if ( this.state.user.id === this.state.currentUser.id) {
 			this.setState({isUser: true})
-			console.log(this.state.isUser)
 		} else {
 			this.setState({isUser: false})
-			console.log(this.state.isUser)
 		}
 	};
 
@@ -177,7 +173,7 @@ class Collection extends Component {
 				</Link>
 			<h1>{this.state.collectionInfo.title}</h1>
 			<h2>{this.state.collectionInfo.description}</h2>
-			
+			{this.state.isUser ? (
 				<Dropzone
 					multiple={false}
 					accept="image/*"
@@ -185,7 +181,9 @@ class Collection extends Component {
 				>
 					<p>Drop an image or click select a file to upload. </p>
 				</Dropzone>
-		
+			) : (
+					null
+				)}
 				<div className="collections">
 	                {this.state.photos.length ? (
 	                    <PhotoList>
@@ -210,7 +208,7 @@ class Collection extends Component {
 
 	                    </PhotoList>
 	                ) : (
-	                <h3>Add some photos!</h3>
+	                <h3>There are no photos here yet!</h3>
 	                )}
 	            </div>
 		        <MuiThemeProvider>

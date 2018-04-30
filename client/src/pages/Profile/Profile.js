@@ -16,6 +16,8 @@ class Dashboard extends Component {
         bio: "",
         collections: [],
         friends: [],
+        currentUser: [],
+        isUser: false
 	};
 
     componentDidMount() {
@@ -29,10 +31,24 @@ class Dashboard extends Component {
                 user: res.data.user,
                 bio: res.data.user.bio,
                 collections: res.data.collection,
-                friends: res.data.friends
+                friends: res.data.friends,
+                currentUser: res.data.currentUser[0]
             })
+            this.userSpecific();
         })
         .catch(err => console.log(err));
+    };
+
+    userSpecific = () => {
+        console.log(this.state.user.id)
+        console.log(this.state.currentUser.id)
+        if ( this.state.user.id === this.state.currentUser.id) {
+            this.setState({isUser: true})
+            console.log(this.state.isUser)
+        } else {
+            this.setState({isUser: false})
+            console.log(this.state.isUser)
+        }
     };
 
     deleteCollection = id => {
@@ -75,12 +91,20 @@ class Dashboard extends Component {
                 }
 		      <h1>{this.state.user.username}</h1>
                 <div>{this.state.bio}</div>
-                <Link to={`/editprofile/${this.props.match.params.username}/${this.props.match.params.id}`}>
-                    <button>Edit Profile</button>
-                </Link>
-                <AddFriendBtn 
-                    onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
-                />
+                {this.state.isUser ? (
+                    <Link to={`/editprofile/${this.props.match.params.username}/${this.props.match.params.id}`}>
+                        <button>Edit Profile</button>
+                    </Link>
+                ) : (
+                    null
+                )}
+                {!this.state.isUser ? (
+                    <AddFriendBtn 
+                        onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
+                    />
+                ) : (
+                    null
+                )}
                 <div className="collections">
                     {this.state.friends.length ? (
                         <List>
@@ -93,7 +117,11 @@ class Dashboard extends Component {
                                 <Link to={`/profile/${friend.username}/${friend.friendId}`}>
                                     {friend.username}
                                 </Link>
-                                    <DeleteCollectBtn onClick={() => this.deleteFriend(friend.friendId)} />
+                                    {this.state.isUser ? (
+                                        <DeleteCollectBtn onClick={() => this.deleteFriend(friend.friendId)} />
+                                    ) : (
+                                            null
+                                        )}
                                 </ListItem>
                             ))}
 
@@ -103,24 +131,34 @@ class Dashboard extends Component {
                     )}
                 </div>
                 <div className="liked-photos">Liked Photos here</div>
-                <div className="notifiction-div">Notifictions here</div>
-            <Link to="/addcollection">Add a new Collection</Link>
-            <div className="collections">
-                {this.state.collections.length ? (
-                    <List>
-                        {this.state.collections.map(collection => (
-                            <ListItem 
-                                key={collection.title}
-                                id={collection.id} 
-                                title={collection.title} 
-                                description={collection.description}
+                {this.state.isUser ? (
+                    <div>
+                        <div className="notifiction-div">Notifictions here</div>
+                        <Link to="/addcollection">Add a new Collection</Link>
+                    </div>
+                 ) : (
+                        null
+                    )}
+                <div className="collections">
+                    {this.state.collections.length ? (
+                        <List>
+                            {this.state.collections.map(collection => (
+                                <ListItem 
+                                    key={collection.title}
+                                    id={collection.id} 
+                                    title={collection.title} 
+                                    description={collection.description}
                                 
-                            >
-                                <DeleteCollectBtn onClick={() => this.deleteCollection(collection.id)} />
-                            </ListItem>
-                        ))}
+                                >
+                                    {this.state.isUser ? (
+                                        <DeleteCollectBtn onClick={() => this.deleteCollection(collection.id)} />
+                                    ) : (
+                                            null
+                                        )}
+                                </ListItem>
+                            ))}
 
-                    </List>
+                        </List>
                 ) : (
                 <h3>Click the button above to start sharing your collections!</h3>
                 )}

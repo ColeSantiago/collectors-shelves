@@ -153,6 +153,7 @@ router.post("/profile", function(req, res) {
 });
 
 router.get("/profile/:username/:id", function(req, res) {
+    let loggedInUser = req.mySession.user;
     models.user.findAll({
         where: {id: req.params.id},
         include: [
@@ -169,10 +170,16 @@ router.get("/profile/:username/:id", function(req, res) {
         ]
     })
     .then(function(results) {
-        res.json({
-            user: results[0].dataValues, 
-            collection: results[0].dataValues.user_collections, 
-            friends: results[0].dataValues.user_friends,
+        models.user.findAll({
+            where: {id: loggedInUser.id}
+        })
+        .then(function(currentUserResults) {
+            res.json({
+                user: results[0].dataValues, 
+                collection: results[0].dataValues.user_collections, 
+                friends: results[0].dataValues.user_friends,
+                currentUser: currentUserResults
+            })
         })
     })
 });
