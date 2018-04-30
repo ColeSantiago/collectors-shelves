@@ -11,7 +11,6 @@ import DeletePhotoBtn from "../../components/DeletePhotoBtn";
 import SvgIcon from 'material-ui/SvgIcon';
 import {blue500, red500} from 'material-ui/styles/colors';
 import Snackbar from 'material-ui/Snackbar';
-import Clap from "react-clap-button";
 
 const HomeIcon = (props) => (
   <SvgIcon {...props}>
@@ -37,7 +36,6 @@ class Collection extends Component {
 			currentUser: [],
 			open: false,
 			isUser: false,
-			isClicked: false
 		};
 	};
 
@@ -88,30 +86,6 @@ class Collection extends Component {
           open: false,
         });
     };
-
-	updateCheck() {
-	    this.setState((oldState) => {
-	      return {
-	        checked: !oldState.checked,
-	      };
-	    });
-	};
-
-	handleClap(photoId) {
-		console.log(photoId);
-		if (this.state.isClicked === false) {
-			this.setState({isClicked: true})
-			console.log("liked")
-			API.addLike({
-				id: photoId
-			})
-			.then(res => this.getCollection())
-	    	.catch(err => console.log(err));
-		} else {
-			console.log("disliked")
-			this.setState({isClicked: false})
-		}
-	};
 
 	onImageDrop(files) {
 		this.setState({
@@ -188,17 +162,7 @@ class Collection extends Component {
 	                            		<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
 	                            	</div>
 	                            	) : (
-	                            			<div onClick={() => this.handleClap(photo.id)}>
-												<Clap
-												  count={photo.likes + 1}
-												  countTotal={photo.likes}
-												  isClicked={this.state.isClicked}
-												  maxCount={1}
-												  theme={{
-												    secondaryColor: '#5f27ae'
-												  }}
-												/>
-											</div>
+	                            			null
 										)}
 	                            </PhotoListItem>
 	                        ))}

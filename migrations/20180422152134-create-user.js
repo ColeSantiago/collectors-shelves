@@ -45,6 +45,9 @@ module.exports = {
       photo: {
         type: Sequelize.STRING
       },
+      claps: {
+        type: Sequelize.INTEGER
+      },
       password: {
         allowNull: false,
         type: Sequelize.STRING, 

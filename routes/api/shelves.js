@@ -14,6 +14,7 @@ router.post("/signup", (req, res) => {
             first_name: newUser.first_name,
             last_name: newUser.last_name,
             email: newUser.email,
+            claps: 0,
             username: newUser.username,
             password: newUser.password,
         }).then(function(result){
@@ -283,17 +284,19 @@ router.post("/edittitle", function(req, res) {
     })
 });
 
-router.post("/addlike", function(req, res) {
+router.post("/addclap", function(req, res) {
     let loggedInUser = req.mySession.user;
-    models.collection_photos.update({
-        likes: models.sequelize.literal('likes + 1')
+    models.user.update({
+        claps: models.sequelize.literal('claps + 1')
     }, {
         where: {id: req.body.id}
     })
     .then(function(result) {
-        models.user_likes.create({
-            userId: loggedInUser.id,
-            photoId: req.body.id,
+        models.user_notifications.create({
+            userId: req.body.id, 
+            friendId: loggedInUser.id,
+            friendUsername: req.body.username,
+            message: `${req.body.username} applauded you!`
         })
         .then(function(subResult) {
             console.log(result);

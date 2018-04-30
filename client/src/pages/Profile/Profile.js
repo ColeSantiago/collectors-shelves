@@ -9,6 +9,7 @@ import {withRouter} from "react-router";
 import AddFriendBtn from "../../components/AddFriendBtn";
 import Placeholder from "./placeholder.png"
 import Nav from "../../components/Nav";
+import Clap from "react-clap-button";
 
 class Dashboard extends Component {
 	state = {
@@ -17,7 +18,8 @@ class Dashboard extends Component {
         collections: [],
         friends: [],
         currentUser: [],
-        isUser: false
+        isUser: false,
+        isClicked: false
 	};
 
     componentDidMount() {
@@ -73,6 +75,22 @@ class Dashboard extends Component {
         .catch(err => console.log(err));
         this.getUserAndCollections();
     }
+
+    handleClap(userId) {
+        console.log(userId);
+        if (this.state.isClicked === false) {
+            this.setState({isClicked: true})
+            console.log("liked")
+            API.addClap({
+                id: userId
+            })
+            .then(res => this.getCollection())
+            .catch(err => console.log(err));
+        } else {
+            console.log("disliked")
+            this.setState({isClicked: false})
+        }
+    };
 	
 	render() {
 		return (
@@ -95,9 +113,22 @@ class Dashboard extends Component {
                     null
                 )}
                 {!this.state.isUser ? (
-                    <AddFriendBtn 
-                        onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
-                    />
+                    <div>
+                        <AddFriendBtn 
+                            onClick={() => this.addFriend(this.props.match.params.id, this.props.match.params.username)} 
+                        />
+                        <div onClick={() => this.handleClap(this.state.user.id)}>
+                            <Clap
+                                count={this.state.user.claps + 1}
+                                countTotal={this.state.user.claps}
+                                isClicked={this.state.isClicked}
+                                maxCount={1}
+                                theme={{
+                                    secondaryColor: '#5f27ae'
+                                }}
+                            />
+                        </div>
+                    </div>
                 ) : (
                     null
                 )}

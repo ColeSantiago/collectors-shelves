@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     bio: DataTypes.STRING,
-    photo: DataTypes.STRING, 
+    photo: DataTypes.STRING,
+    claps: DataTypes.STRING, 
   }, {});
   user.associate = function(models) {
     // associations can be defined here
     user.hasMany(models.user_friends);
-    user.hasMany(models.user_likes);
     user.hasMany(models.user_collection);
     user.hasMany(models.user_notifications);
   };

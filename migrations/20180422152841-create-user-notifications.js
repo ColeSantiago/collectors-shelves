@@ -14,8 +14,11 @@ module.exports = {
       friendId: {
         type: Sequelize.INTEGER
       },
-      photoId: {
-        type: Sequelize.INTEGER
+      friendUsername: {
+        type: Sequelize.STRING
+      },
+      message: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
