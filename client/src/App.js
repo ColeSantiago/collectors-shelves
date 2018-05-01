@@ -10,7 +10,7 @@ import "./App.css";
 
 // components
 import { Input, SignInBtn } from "./SignInForm";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 
 // pages
 import AddCollection from "./pages/AddCollection";
@@ -121,7 +121,7 @@ class SignIn extends Component {
                
                 <MuiThemeProvider>
                     {this.state.redirectToReferrer === false ?
-                        <div>
+                        <div className="sign-in-div">
                              <div className="vertical">
                                 <MuiThemeProvider>
                                     <VerticalNonLinear />
@@ -180,7 +180,7 @@ const App = () => (
             <PrivateRoute exact path="/editphoto/:id" component={EditPhoto} />
             <PrivateRoute exact path="/editprofile/:username/:id" component={EditProfile} />
         </Switch>
-      <Footer/>
+      
     </div>
   </Router>
 );

@@ -1,0 +1,9 @@
+.article-item {
+	text-decoration: none;
+	line-height: 30px;
+	color: #a02e2e;
+}
+
+.article-item:hover {
+	color: black;
+}

@@ -9,28 +9,27 @@
 
 .wrapper {
 	display: grid;
-	grid-template-areas: 
-	".  . a"
-	".  . b";
 	justify-content: center;
 	
 }
 
-.vertical {
-	grid-area: a;
-	height: 280px;
-	max-width: 400px;
-	background: white;
-	margin: 30px;
-	padding: 50px;
-	border-radius: 20px;
-	box-shadow: 2px 3px 23px #000;
+.sign-in-div {
 	animation: 1.5s ease-out 0s 1 slideInFromLeft;
 }
 
+.vertical {
+	height: 280px;
+	max-width: 400px;
+	background: white;
+	margin: 20px;
+	padding: 50px;
+	border-radius: 20px;
+	box-shadow: 2px 3px 23px #000;
+	
+}
+
 .sign-in-form {
-	grid-area: b;
-	animation: 1.5s ease-out 0s 1 slideInFromLeft;
+	padding: 70px;
 }
 
 form {
@@ -46,9 +45,9 @@ form {
 
 footer {
 	background: gray;
-	position: fixed;
-	bottom: 0px;
+	position: absolute;
 	left: 0px;
+	right: 0px;
 	width: 100%;
 	text-align: center;
 	padding: 30px;

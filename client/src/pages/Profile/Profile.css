@@ -1,0 +1,23 @@
+.profile-pic {
+	border-radius: 50%;
+	max-width: 200px;
+
+}
+
+.friends-div {
+	background: green;
+	margin: 15px;
+}
+
+.notifications-div {
+	background: white;
+	margin: 15px;
+	text-align: center;
+	overflow: scroll;
+}
+
+.collections-div {
+	background: gray;
+	margin: 15px;
+	padding: 40px;
+}

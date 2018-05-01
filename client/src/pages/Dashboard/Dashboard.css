@@ -1,0 +1,52 @@
+.dashboard-wrapper {
+	display: grid;
+	grid-template-areas: 
+	"header header header header header header"
+	"profile profile profile article article article"
+	"photo photo photo photo photo photo";
+}
+
+.user-info {
+	grid-area: header;
+}
+
+.go-to-profile {
+	grid-area: profile;
+	margin-top: 250px;
+	background: white;
+	max-height: 20px;
+	padding: 20px;
+	font-size: 30px;
+	text-decoration: none;
+	border-radius: 10px;
+	color: #a02e2e;
+	border: 1px solid black;
+}
+
+.go-to-profile:hover {
+	background: #a02e2e;
+	color: white;
+}
+
+.article-div {
+	grid-area: article;
+	max-width: 500px;
+	max-height: 500px;
+	background: white;
+	overflow: scroll;
+	padding: 30px;
+	margin-left: 220px;
+	box-shadow: 2px 3px 23px #000;
+}
+
+.activity-div {
+	grid-area: photo;
+	margin-top: 40px;
+	margin-left: 140px;
+	/*background: white;*/
+	/*overflow: scroll;*/
+	/*max-height: 500px;*/
+	max-width: 740px;
+	text-align: center;
+}
+

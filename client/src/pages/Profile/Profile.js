@@ -5,6 +5,7 @@ import Clap from "react-clap-button";
 
 import API from "../../utils/API";
 import Placeholder from "./placeholder.png";
+import "./Profile.css";
 
 // components
 import { List, ListItem } from "../../components/CollectionList";
@@ -116,21 +117,21 @@ class Dashboard extends Component {
                 </MuiThemeProvider>
                 {this.state.user.photo === null ? <img src={Placeholder} alt="profile" /> :
                     <div>
-                        <img src={this.state.user.photo} alt="Actual Profile"/>
+                        <img className="profile-pic" src={this.state.user.photo} alt="Actual Profile"/>
                     </div>
                 }
-		      <h1>{this.state.user.username}</h1>
-              <h1>I've been applaued {this.state.user.claps} time(s)</h1>
-                <div>{this.state.bio}</div>
+		      <h1 className="username">{this.state.user.username}</h1>
+              <h1 className="applaued">I've been applaued {this.state.user.claps} time(s)</h1>
+                <div className="bio">{this.state.bio}</div>
                 {this.state.isUser ? (
                     <Link to={`/editprofile/${this.props.match.params.username}/${this.props.match.params.id}`}>
-                        <button>Edit Profile</button>
+                        <button className="edit-profile-btn">Edit Profile</button>
                     </Link>
                 ) : (
                     null
                 )}
                 {!this.state.isUser ? (
-                    <div>
+                    <div className="add-friend-div">
                         <AddFriendBtn 
                             onClick={() => this.addFriend(
                                 this.props.match.params.id, 
@@ -138,7 +139,9 @@ class Dashboard extends Component {
                                 this.state.currentUser.username
                             )} 
                         />
-                        <div onClick={() => this.handleClap(this.state.user.id, this.state.currentUser.username)}>
+                        <div className="clap-div" onClick={ () => 
+                            this.handleClap(this.state.user.id, this.state.currentUser.username)}
+                        >
                             <Clap
                                 isClicked={this.state.isClicked}
                                 maxCount={1}
@@ -151,7 +154,7 @@ class Dashboard extends Component {
                 ) : (
                     null
                 )}
-                <div className="collections">
+                <div className="friends-div">
                     {this.state.friends.length ? (
                         <List>
                             {this.state.friends.map(friend => (
@@ -177,7 +180,7 @@ class Dashboard extends Component {
                 </div>
                 {this.state.isUser ? (
                     <div>
-                       <div className="notifications">
+                       <div className="notifications-div">
                                 {this.state.notifications.length ? (
                                     <NotificationList>
                                         {this.state.notifications.map(notification => (
@@ -199,7 +202,7 @@ class Dashboard extends Component {
                  ) : (
                         null
                     )}
-                <div className="collections">
+                <div className="collections-div">
                     {this.state.collections.length ? (
                         <List>
                             {this.state.collections.map(collection => (

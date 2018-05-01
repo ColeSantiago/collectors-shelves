@@ -3,6 +3,7 @@ import {withRouter} from 'react-router';
 import { Link } from "react-router-dom";
 
 import API from "../../utils/API";
+import "./Dashboard.css";
 
 // components
 import Wrapper from "../../components/Wrapper";
@@ -12,13 +13,15 @@ import { PhotoList, PhotoListItem } from "../../components/PhotoListDashboard";
 
 // material ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import Divider from 'material-ui/Divider';
 
 class Dashboard extends Component {
 	state = {
 		user: [],
         articles: [],
         activity: [],
-        articleLimit: 10
+        articleLimit: 10,
+        photoLimit: 10
 	};
 
     componentDidMount() {
@@ -37,51 +40,67 @@ class Dashboard extends Component {
    		})
     	.catch(err => console.log(err));
   	};
+
+    // loads 10 more photos to the dashboard when clicked
+    loadMore () {
+        console.log('clicked');
+        this.setState({photoLimit: this.state.photoLimit + 10});
+        this.getcurrentUserAndActivity();
+    };
 	
 	render() {
 		return (
-		  <Wrapper>
-                <MuiThemeProvider>
-                    <Nav username={this.state.user.username} id={this.state.user.id}/>
-                </MuiThemeProvider>
-            <h1>hey {this.state.user.username}</h1>
-          		<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
-                    Go To Your Profile
-                </Link>
-            <div className="article-div">
-                {this.state.articles.length ? (
-                    <List>
-                        {this.state.articles.slice(0, this.state.articleLimit).map(article => (
-                            <ListItem 
-                                key={article.id} 
-                                title={article.title} 
-                                link={article.link}
-                            />
-                        ))}
-                    </List>
-                ) : (
-                    null
-                )}
-            </div>
-                <div className="activity-div">
-                    {this.state.activity.length ? (
-                        <PhotoList>
-                            {this.state.activity.map(photo => (
-                                <PhotoListItem 
-                                    key={photo.id}
-                                    id={photo.id}
-                                    collectionId={photo.collectionId}
-                                    url={photo.photo_link}
-                                    title={photo.title}     
-                                >
-                                </PhotoListItem>
-                            ))}
-                        </PhotoList>
-                    ) : (
-                        null
-                    )}
-                </div>
-		  </Wrapper>
+            <MuiThemeProvider>
+    		  <Wrapper>
+                <div className="dashboard-wrapper"> 
+                    <div className="user-info">  
+                        <Nav username={this.state.user.username} id={this.state.user.id}/>
+                        <h1>hey {this.state.user.username}</h1>
+                    </div>
+                  	<Link className="go-to-profile" to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
+                        Go To Your Profile
+                    </Link>
+                    <div className="article-div">
+                        {this.state.articles.length ? (
+                            <List>
+                                {this.state.articles.slice(0, this.state.articleLimit).map(article => (
+                                    <ListItem 
+                                        key={article.id} 
+                                        title={article.title} 
+                                        link={article.link}
+                                    >
+                                        <Divider />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        ) : (
+                            null
+                        )}
+                    </div>
+                        <div className="activity-div">
+                            {this.state.activity.length ? (
+                                <PhotoList>
+                                    {this.state.activity.slice(0, this.state.photoLimit).map(photo => (
+                                        <PhotoListItem 
+                                            key={photo.id}
+                                            id={photo.id}
+                                            collectionId={photo.collectionId}
+                                            url={photo.photo_link}
+                                            title={photo.title}     
+                                        >
+                                        </PhotoListItem>
+                                    ))}
+                                    <button className="load-more-btn" onClick={this.loadMore.bind(this)}>
+                                        Load More
+                                    </button>
+                                </PhotoList>
+                            ) : (
+                                null
+                            )}
+                        </div>
+                    </div>
+    		  </Wrapper>
+          </MuiThemeProvider>
 		);
 	}
 }
