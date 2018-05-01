@@ -1,1 +1,95 @@
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.wrapper {
+	display: grid;
+	grid-template-areas: 
+	".  . a"
+	".  . b";
+	justify-content: center;
+	
+}
+
+.vertical {
+	grid-area: a;
+	height: 280px;
+	max-width: 400px;
+	background: white;
+	margin: 30px;
+	padding: 50px;
+	border-radius: 20px;
+	box-shadow: 2px 3px 23px #000;
+	animation: 1.5s ease-out 0s 1 slideInFromLeft;
+}
+
+.sign-in-form {
+	grid-area: b;
+	animation: 1.5s ease-out 0s 1 slideInFromLeft;
+}
+
+form {
+	background: white;
+	max-width: 400px;
+	text-align: center;
+	margin: 20px;
+	padding: 50px;
+	border-radius: 20px;
+	display: inline-grid;
+	box-shadow: 2px 3px 23px #000;
+}
+
+footer {
+	background: gray;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	text-align: center;
+	padding: 30px;
+	border-top: 2px solid black;
+	box-shadow: 4px 3px 11px #000;
+}
+
+.sign-in {
+	margin: 10px;
+}
+
+.sign-up {
+	margin-top: 10px;
+	text-decoration: none;
+	color: #a02e2e;
+}
+
+.sign-up:hover {
+	color: black;
+}
+
+.to-dashboard {
+	margin-top: 90px;
+	padding: 50px;
+	text-decoration: none;
+	color: #a02e2e;
+	background: white;
+	font-size: 40px;
+	border-radius: 20px;
+	text-align: center;
+	line-height: 50px;
+	box-shadow: 4px 3px 11px #000;
+}
+
+.to-dashboard:hover {
+	transform: scale(1.1);
+	box-shadow: 4px 3px 20px #000;
+}
+
+.to-dashboard:active {
+	transform: scale(0.9);
+}
+
 

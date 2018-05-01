@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import API from "../../utils/API";
 import { Input, SignUpBtn } from "../../components/SignUpForm";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import "./SignUp.css";
 
 class SignUp extends Component {
   state = {
@@ -42,7 +43,7 @@ class SignUp extends Component {
       <div>
       <h1>Start showing off your collection!</h1>
         <MuiThemeProvider>
-          <form>
+          <form className="sign-up-form">
               <Input
                   value={this.state.firstName}
                     onChange={this.handleInputChange}

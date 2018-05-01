@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { Redirect, withRouter } from "react-router";
+
+import VerticalNonLinear from "./components/VerticalNonLinear"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import API from "./API";
+import "./App.css";
 
 // components
 import { Input, SignInBtn } from "./SignInForm";
@@ -114,39 +117,47 @@ class SignIn extends Component {
 
     render() {
         return(
-            <div>
+            <div className="wrapper">
+               
                 <MuiThemeProvider>
                     {this.state.redirectToReferrer === false ?
-                        <form onSubmit={this.handleFormSubmit.bind(this)}>
-                            <Input
-                                value={this.state.userName}
-                                onChange={this.handleInputChange}
-                                name="userName"
-                                hintText="Username Field"
-                                floatingLabelText="Username"
-                                floatingLabelFixed={true}
-                            />
-                            <Input
-                                value={this.state.password}
-                                onChange={this.handleInputChange}
-                                hintText="Password Field"
-                                floatingLabelText="Password"
-                                floatingLabelFixed={true}
-                                name="password"
-                                type="password"
-                            />
-                            <SignInBtn type="submit" />
-                        <Link className="navbar-link" to="/signup">
-                            Sign Up
-                        </Link>
-                        
-                        </form>
+                        <div>
+                             <div className="vertical">
+                                <MuiThemeProvider>
+                                    <VerticalNonLinear />
+                                </MuiThemeProvider>
+                            </div>
+                            <form className="sign-in-form" onSubmit={this.handleFormSubmit.bind(this)}>
+                                <Input
+                                    value={this.state.userName}
+                                    onChange={this.handleInputChange}
+                                    name="userName"
+                                    hintText="Username"
+                                    floatingLabelText="Username"
+                                    floatingLabelFixed={true}
+                                />
+                                <Input
+                                    value={this.state.password}
+                                    onChange={this.handleInputChange}
+                                    hintText="Password"
+                                    floatingLabelText="Password"
+                                    floatingLabelFixed={true}
+                                    name="password"
+                                    type="password"
+                                />
+                                <SignInBtn className="sign-in" type="submit" />
+                            <Link className="sign-up" to="/signup">
+                                Sign Up
+                            </Link>
+                            
+                            </form>
+                        </div>
                     :null}
                 </MuiThemeProvider>
-
                 {this.state.redirectToReferrer === true ?
-                    <Link className="navbar-link" to="/dashboard">
-                        Go To Your Dashboard
+                    <Link className="to-dashboard" to="/dashboard">
+                        <p>Login Successful</p>
+                        <p>Go To Your Dashboard</p>
                     </Link>
                 :null}
             </div>
