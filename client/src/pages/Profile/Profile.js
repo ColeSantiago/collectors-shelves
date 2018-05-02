@@ -8,16 +8,18 @@ import Placeholder from "./placeholder.png";
 import "./Profile.css";
 
 // components
-import { List, ListItem } from "../../components/CollectionList";
-import { FriendList, FriendListItem } from "../../components/FriendList";
+import { CollectionList, CollectionListItem } from "../../components/CollectionList";
 import { NotificationList, NotificationListItem } from "../../components/NotificationList";
-import Wrapper from "../../components/Wrapper";
+// import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
 import AddFriendBtn from "../../components/AddFriendBtn";
 // import Nav from "../../components/Nav";
 
 // material ui
-// import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+// import Avatar from 'material-ui/Avatar';
 
 class Profile extends Component {
 	state = {
@@ -130,125 +132,132 @@ class Profile extends Component {
 	
 	render() {
 		return (
-            <Wrapper>
-                {this.state.user.photo === null ? <img src={Placeholder} alt="profile" /> :
-                    <div>
-                        <img className="profile-pic" src={this.state.user.photo} alt="Actual Profile"/>
-                    </div>
-                }
-		      <h1 className="username">{this.state.user.username}</h1>
-              <h1 className="applaued">I've been applaued {this.state.user.claps} time(s)</h1>
-                <div className="bio">{this.state.bio}</div>
-                {this.state.isUser ? (
-                    <Link to={`/editprofile/${this.props.match.params.username}/${this.props.match.params.id}`}>
-                        <button className="edit-profile-btn">Edit Profile</button>
-                    </Link>
-                ) : (
-                    null
-                )}
-                {!this.state.isUser ? (
-                    <div className="add-friend-div">
-                        <AddFriendBtn 
-                            onClick={() => this.addFriend(
-                                this.props.match.params.id, 
-                                this.props.match.params.username,
-                                this.state.currentUser.username
-                            )} 
-                        />
-                        <div className="clap-div" onClick={ () => 
-                            this.handleClap(this.state.user.id, this.state.currentUser.username)}
-                        >
-                            <Clap
-                                isClicked={this.state.isClicked}
-                                maxCount={1}
-                                theme={{
-                                    secondaryColor: '#5f27ae'
-                                }}
-                            />
-                        </div>
-                    </div>
-                ) : (
-                    null
-                )}
-                <div className="friends-div">
-                    {this.state.friends.length ? (
-                        <FriendList>
-                            {this.state.friends.map(friend => (
-                                <FriendListItem 
-                                    key={friend.friendId}
-                                    id={friend.friendId} 
-                                    username={friend.username}
-                                    onClick={() => this.getNextUser(friend.username, friend.friendId)}   
+            <MuiThemeProvider>
+                <div className="profile-wrapper"> 
+                    <div className="about-user">
+                        {this.state.user.photo === null ? <img src={Placeholder} alt="profile" /> :
+                            <div>
+                                <img className="profile-pic" src={this.state.user.photo} alt="Actual Profile"/>
+                            </div>
+                        }
+        		      <h1 className="username">{this.state.user.username}</h1>
+                      <h1 className="applaued">I've been applaued {this.state.user.claps} time(s)</h1>
+                        <div className="bio">{this.state.bio}</div>
+                        {this.state.isUser ? (
+                            <div>
+                                <Link to={`/editprofile/${this.props.match.params.username}/${this.props.match.params.id}`}>
+                                    <button className="edit-profile-btn">Edit Profile</button>
+                                </Link> <br></br>
+                                <Link className="add-collection-btn" to="/addcollection">Add a new Collection</Link>
+                            </div>
+                        ) : (
+                            null
+                        )}
+                        {!this.state.isUser ? (
+                            <div className="add-friend-div">
+                                <AddFriendBtn className="add-friend-btn"
+                                    onClick={() => this.addFriend(
+                                        this.props.match.params.id, 
+                                        this.props.match.params.username,
+                                        this.state.currentUser.username
+                                    )} 
+                                />
+                                <div className="clap-div" onClick={ () => 
+                                    this.handleClap(this.state.user.id, this.state.currentUser.username)}
                                 >
-                                <Link to={`/profile/${friend.username}/${friend.friendId}`}>
-                                    <div>{friend.username}</div>
-                                </Link>
-                                    {this.state.isUser ? (
-                                        <DeleteCollectBtn onClick={() => this.deleteFriend(friend.friendId)} />
-                                    ) : (
-                                            null
-                                        )}
-                                </FriendListItem>
-                            ))}
-                        </FriendList>
+                                    <Clap
+                                        isClicked={this.state.isClicked}
+                                        maxCount={1}
+                                        theme={{
+                                            secondaryColor: '#5f27ae'
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            null
+                        )}
+                    </div>
+                    <div className="friends-div">
+                        {this.state.friends.length ? (
+                           <List>
+                           <Subheader>Followers</Subheader>
+                                {this.state.friends.map(friend => (    
+                                    <ListItem
+                                        key={friend.friendId}
+                                        primaryText={friend.username}
+                                        onClick={() => this.getNextUser(friend.username, friend.friendId)}
+                                        secondaryText={
+                                            <p>
+                                                {this.state.isUser ? (
+                                                    <DeleteCollectBtn className="delete" onClick={() => this.deleteFriend(friend.friendId)} />
+                                                ) : (
+                                                        null
+                                                    )}
+                                            </p>
+                                        } 
+                                        secondaryTextLines={2}
+                                    />     
+                                ))}
+                           </List>
+                        ) : (
+                                <h3>Click the button above to start sharing your collections!</h3>
+                            )}
+                    </div>
+                    {this.state.isUser ? (
+                        
+                           <div className="notifications-div">
+                                <h1 className="notification-title">Notifications</h1>
+                                    {this.state.notifications.length ? (
+                                        <NotificationList>
+                                            {this.state.notifications.map(notification => (
+                                                    <NotificationListItem 
+                                                        key={notification.id}
+                                                        id={notification.id} 
+                                                        message={notification.message} 
+                                                        friendId={notification.friendId}
+                                                        friendUsername={notification.friendUsername}
+                                                        onClick={() => this.getNextUser(notification.friendUsername, notification.friendId)}
+                                                    >
+                                                        <Link className="notification-item" to={`/profile/${notification.friendUsername}/${notification.id}`}>
+                                                            <div>{notification.message}</div>
+                                                        </Link>
+                                                    </NotificationListItem>
+                                                
+                                            ))}
+                                        </NotificationList>
+                                ) : (
+                                        <h3>You don't have any notifications yet</h3>
+                                    )}
+                            </div>
+                       
+                     ) : (
+                            null
+                        )}
+                    <div className="collections-div">
+                        {this.state.collections.length ? (
+                            <CollectionList>
+                                {this.state.collections.map(collection => (
+                                    <CollectionListItem 
+                                        key={collection.title}
+                                        id={collection.id} 
+                                        title={collection.title} 
+                                        description={collection.description}
+                                    >
+                                        {this.state.isUser ? (
+                                            <DeleteCollectBtn className="delete" onClick={() => this.deleteCollection(collection.id)} />
+                                        ) : (
+                                                null
+                                            )}
+                                    </CollectionListItem>
+                                ))}
+                            </CollectionList>
                     ) : (
                             <h3>Click the button above to start sharing your collections!</h3>
                         )}
                 </div>
-                {this.state.isUser ? (
-                    <div>
-                       <div className="notifications-div">
-                                {this.state.notifications.length ? (
-                                    <NotificationList>
-                                        {this.state.notifications.map(notification => (
-                                            
-                                                <NotificationListItem 
-                                                    key={notification.id}
-                                                    id={notification.id} 
-                                                    message={notification.message} 
-                                                    friendId={notification.friendId}
-                                                    friendUsername={notification.friendUsername}
-                                                    onClick={() => this.getNextUser(notification.friendUsername, notification.friendId)}
-                                                >
-                                                    <Link className="notification-item" to={`/profile/${notification.friendUsername}/${notification.id}`}>
-                                                        <div>{notification.message}</div>
-                                                    </Link>
-                                                </NotificationListItem>
-                                            
-                                        ))}
-                                    </NotificationList>
-                            ) : (
-                                    <h3>You don't have any notifications yet</h3>
-                                )}
-                        </div>
-                        <Link to="/addcollection">Add a new Collection</Link>
-                    </div>
-                 ) : (
-                        null
-                    )}
-                <div className="collections-div">
-                    {this.state.collections.length ? (
-                        <List>
-                            {this.state.collections.map(collection => (
-                                <ListItem 
-                                    key={collection.title}
-                                    id={collection.id} 
-                                    title={collection.title} 
-                                    description={collection.description}
-                                >
-                                    {this.state.isUser ? (
-                                        <DeleteCollectBtn onClick={() => this.deleteCollection(collection.id)} />
-                                    ) : (
-                                            null
-                                        )}
-                                </ListItem>
-                            ))}
-                        </List>
-                ) : (
-                        <h3>Click the button above to start sharing your collections!</h3>
-                    )}
             </div>
-          </Wrapper>
+            </MuiThemeProvider>
 		);
 	}
 }

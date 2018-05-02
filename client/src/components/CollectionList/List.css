@@ -1,0 +1,13 @@
+.collection-item {
+	text-decoration: none;
+	font-size: 20px;
+}
+
+.collection-li {
+	margin: 15px;
+	padding: 10px;
+}
+
+.collection-li:nth-of-type(even) {
+	background: #f9f5f5;
+}

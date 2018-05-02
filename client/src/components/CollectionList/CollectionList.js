@@ -1,7 +1,7 @@
 import React from "react";
 import "./List.css";
 
-export const List = ({ children }) => {
+export const CollectionList = ({ children }) => {
   return (
     <div className="list-div">
       <ul className="list-group">
