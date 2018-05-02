@@ -20,13 +20,12 @@ import Profile from "./pages/Profile";
 import SignUp from "./pages/SignUp";
 import EditPhoto from "./pages/EditPhoto";
 import EditProfile from "./pages/EditProfile";
-// import Search from "./pages/Search";
 
 // the sign out button
 const AuthButton = withRouter(({ history }) => (
   Auth.isAuthenticated ? (
-    <p>
-      Welcome! <button onClick={() => {
+    <p className="signout-div">
+      <button onClick={() => {
         Auth.signout(() => history.push('/'))
       }}>Sign out</button>
     </p>

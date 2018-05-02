@@ -50,4 +50,7 @@ export default {
   deleteFriend: function(friendId) {
   	return axios.post("/api/shelves/unfriend", friendId);
   },
+  search: function(searchData) {
+    return axios.post("/api/shelves/dashboard", searchData);
+  }
 };

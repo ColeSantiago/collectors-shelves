@@ -47,7 +47,8 @@ router.post("/signup", (req, res) => {
                         .then(function(favCollectionPhotoResult) {
                             // creating a temp photo friend
                             models.user_friends.create({
-                                userId: result.dataValues.id
+                                userId: result.dataValues.id,
+                                username: "Add some friends!"
                             })
                             .then(function(friendResult) {
                                 // creating a welcome message for the notification area
@@ -416,7 +417,20 @@ router.post("/unfriend", function(req, res) {
     .then(function(result) {
         console.log("unfriend");
     })
-})
+});
+
+router.post("/dashboard", function(req, res) {
+    console.log(req.body);
+    models.collection_photos.findAll({
+        where :{
+            title: {
+                $like: req.body.searchText + '%'
+            }
+        }
+    }).then(function(searchResults) {          
+        res.json({searchResults: searchResults});
+    });    
+});
 
 // function that sends the email to the created users
 function sendEmail(newUser){

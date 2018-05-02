@@ -1,7 +1,7 @@
 .dashboard-wrapper {
 	display: grid;
 	grid-template-areas: 
-	"header header header header header header"
+	"signout signout .  . header header"
 	"profile profile profile article article article"
 	"photo photo photo photo photo photo";
 }
@@ -48,5 +48,25 @@
 	/*max-height: 500px;*/
 	max-width: 740px;
 	text-align: center;
+}
+
+.user-info {
+	background: white;
+	font-size: 25px;
+	padding: 30px;
+	margin-bottom: 15px;
+	/*width: 200px;*/
+	text-align: center;
+	border-radius: 50%;
+}
+
+.signout-div {
+	grid-area: signout;
+
+}
+
+.search-div {
+	grid-area: photo;
+	margin: 0 auto;
 }
 
