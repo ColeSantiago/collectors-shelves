@@ -25,7 +25,13 @@ class SignUp extends Component {
 
   // handles form submit to create a user
   handleFormSubmit = event => {
-    if (this.state.password === this.state.confirmPassword) {
+    if (this.state.firstName.length &&
+        this.state.lastName.length &&
+        this.state.email.length &&
+        this.state.userName.length &&
+        this.state.password.length &&
+        this.state.password === this.state.confirmPassword
+      ) {
       API.createUser({
         first_name: this.state.firstName,
         last_name: this.state.lastName,
@@ -35,6 +41,8 @@ class SignUp extends Component {
       })
       .then(res => console.log('user created'))
       .catch(err => console.log(err));
+    } else {
+      alert("Please fill in all areas and check your password and email");
     }
   };
 
