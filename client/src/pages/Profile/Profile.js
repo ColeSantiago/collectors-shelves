@@ -9,6 +9,7 @@ import "./Profile.css";
 
 // components
 import { List, ListItem } from "../../components/CollectionList";
+import { FriendList, FriendListItem } from "../../components/FriendList";
 import { NotificationList, NotificationListItem } from "../../components/NotificationList";
 import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
@@ -18,7 +19,7 @@ import Nav from "../../components/Nav";
 // material ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
-class Dashboard extends Component {
+class Profile extends Component {
 	state = {
 		user: [],
         bio: "",
@@ -50,6 +51,24 @@ class Dashboard extends Component {
             this.userSpecific();
         })
         .catch(err => console.log(err));
+    };
+
+    getNextUser = (username, id) => {
+        API.getUserProfile(username, id)
+        .then(res => {
+            console.log(res)
+            this.setState({
+                user: res.data.user,
+                bio: res.data.user.bio,
+                collections: res.data.collection,
+                friends: res.data.friends,
+                notifications: res.data.notifications,
+                currentUser: res.data.currentUser[0]
+            })
+            this.userSpecific();
+        })
+        .catch(err => console.log(err));
+        
     };
 
     // checking if the user viewing the page is the onwer of the collection
@@ -156,24 +175,25 @@ class Dashboard extends Component {
                 )}
                 <div className="friends-div">
                     {this.state.friends.length ? (
-                        <List>
+                        <FriendList>
                             {this.state.friends.map(friend => (
-                                <ListItem 
+                                <FriendListItem 
                                     key={friend.friendId}
                                     id={friend.friendId} 
-                                    username={friend.username}    
+                                    username={friend.username}
+                                    onClick={() => this.getNextUser(friend.username, friend.friendId)}   
                                 >
                                 <Link to={`/profile/${friend.username}/${friend.friendId}`}>
-                                    {friend.username}
+                                    <div>{friend.username}</div>
                                 </Link>
                                     {this.state.isUser ? (
                                         <DeleteCollectBtn onClick={() => this.deleteFriend(friend.friendId)} />
                                     ) : (
                                             null
                                         )}
-                                </ListItem>
+                                </FriendListItem>
                             ))}
-                        </List>
+                        </FriendList>
                     ) : (
                             <h3>Click the button above to start sharing your collections!</h3>
                         )}
@@ -184,13 +204,20 @@ class Dashboard extends Component {
                                 {this.state.notifications.length ? (
                                     <NotificationList>
                                         {this.state.notifications.map(notification => (
-                                            <NotificationListItem 
-                                                key={notification.id}
-                                                id={notification.id} 
-                                                message={notification.message} 
-                                                friendId={notification.friendId}
-                                                friendUsername={notification.friendUsername}
-                                            />
+                                            
+                                                <NotificationListItem 
+                                                    key={notification.id}
+                                                    id={notification.id} 
+                                                    message={notification.message} 
+                                                    friendId={notification.friendId}
+                                                    friendUsername={notification.friendUsername}
+                                                    onClick={() => this.getNextUser(notification.friendUsername, notification.friendId)}
+                                                >
+                                                    <Link className="notification-item" to={`/profile/${notification.friendUsername}/${notification.id}`}>
+                                                        <div>{notification.message}</div>
+                                                    </Link>
+                                                </NotificationListItem>
+                                            
                                         ))}
                                     </NotificationList>
                             ) : (
@@ -229,4 +256,4 @@ class Dashboard extends Component {
 	}
 }
 
-export default withRouter(Dashboard);
+export default withRouter(Profile);

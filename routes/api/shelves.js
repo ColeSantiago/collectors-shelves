@@ -88,13 +88,7 @@ router.post("/signin", function(req, res) {
                 console.log("passwords match");
                 req.mySession.user = dbUser;
                 // creating there status to be online
-                    models.user_status.create({
-                        login_status: true,
-                        userId : dbUser.id
-                    }).then(function(status){
-                        console.log("You are online!");
-                        res.json(status);
-                    });
+                res.json({login_status: true});
             // if the passwords do not match 
             } else {
                 alert("We cannot find either you Username or Password");
@@ -105,19 +99,6 @@ router.post("/signin", function(req, res) {
         console.log(err);
     });
 }); 
-
-// sign out route to update/destory the users online status
-router.post("/signout", function(req,res){
-    console.log("Signing out User", req.body.userId); 
-    
-     models.user_status.destroy({
-        where : {
-            userId : req.body.userId
-            }
-        }).then(function(status){
-            console.log("You are offline!");  
-    });     
-});
 
 // Another crazy looking route, but this is just finding the current user, scraping articles about
 // action figures, and also displaying all of the uploads to the dashboard

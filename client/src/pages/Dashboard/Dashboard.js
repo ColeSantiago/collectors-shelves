@@ -189,7 +189,7 @@ class Dashboard extends Component {
                                                 </button>
                                         </PhotoList>
                                     ): (
-                                        <p>No Results</p>
+                                        <p>No Results. Add titles to your photos so people can discover you!</p>
                                 )}
                                 </div>
                             )}

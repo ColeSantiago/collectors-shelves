@@ -178,8 +178,7 @@ const App = () => (
             <PrivateRoute exact path="/collection/:id" component={Collection} />
             <PrivateRoute exact path="/editphoto/:id" component={EditPhoto} />
             <PrivateRoute exact path="/editprofile/:username/:id" component={EditProfile} />
-        </Switch>
-      
+        </Switch> 
     </div>
   </Router>
 );

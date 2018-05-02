@@ -12,6 +12,8 @@ export default {
   	return axios.get("/api/shelves/dashboard");
   },
   getUserProfile: function(username, id) {
+    console.log(username)
+    console.log(id)
   	return axios.get("/api/shelves/profile/" + username + "/" + id);
   },
   updateBio: function(userBio) {
