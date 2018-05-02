@@ -3,6 +3,7 @@ import { Input, AddCollectionBtn } from "../../components/AddCollectionForm";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Link } from "react-router-dom";
 import API from "../../utils/API";
+import "./AddCollection.css";
 
 // the add collection page
 class AddCollection extends Component {
@@ -48,10 +49,10 @@ class AddCollection extends Component {
 
 	render() {
 		return (
-			<div>
-				<h1>Describe your collection first, you'll upload your pictures in a second.</h1>
+			<div className="add-collection-div">
+				<h1 className="describe">Name and describe your collection first, you'll upload pictures in a second.</h1>
 				<MuiThemeProvider>
-		          <form>
+		          <form className="add-collection-form">
 		              <Input
 		                  value={this.state.title}
 		                    onChange={this.handleInputChange}
@@ -67,7 +68,7 @@ class AddCollection extends Component {
 		                  <Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
 		                  	<AddCollectionBtn onClick={this.handleFormSubmit} />
 		                  </Link>
-		                  <Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
+		                  <Link className="nevermind" to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
 		                    Nevermind
 		                  </Link>
 		            </form>

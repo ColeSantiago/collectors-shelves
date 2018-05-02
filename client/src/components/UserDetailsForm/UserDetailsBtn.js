@@ -1,7 +1,6 @@
 import React from "react";
+import RaisedButton from 'material-ui/RaisedButton';
 
 export const UserDetailsBtn = props => (
-  <button onClick={props.onClick} {...props} className="FormBtn">
-    {props.children}
-  </button>
+  <RaisedButton label="Update All" primary={true} onClick={props.onClick} {...props} className="FormBtn" />
 );

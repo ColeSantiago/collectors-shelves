@@ -5,6 +5,7 @@ import Dropzone from "react-dropzone";
 import request from "superagent";
 
 import API from "../../utils/API";
+import "./Collection.css";
 
 // components
 import { PhotoList, PhotoListItem } from "../../components/PhotoListCollection";
@@ -132,13 +133,15 @@ class Collection extends Component {
 				<h1>{this.state.collectionInfo.title}</h1>
 				<h2>{this.state.collectionInfo.description}</h2>
 				{this.state.isUser ? (
-					<Dropzone
-						multiple={false}
-						accept="image/*"
-						onDrop={this.onImageDrop.bind(this)}
-					>
-						<p>Drop an image or click select a file to upload. </p>
-					</Dropzone>
+					<div className="dropzone-div">
+						<Dropzone
+							multiple={false}
+							accept="image/*"
+							onDrop={this.onImageDrop.bind(this)}
+						>
+							<p className="warning">Drop an image or click select a file to upload. </p>
+						</Dropzone>
+					</div>
 				) : (
 		                null
 					)}

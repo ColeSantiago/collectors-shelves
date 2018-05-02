@@ -10,16 +10,14 @@ import "./Profile.css";
 // components
 import { CollectionList, CollectionListItem } from "../../components/CollectionList";
 import { NotificationList, NotificationListItem } from "../../components/NotificationList";
-// import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
 import AddFriendBtn from "../../components/AddFriendBtn";
-// import Nav from "../../components/Nav";
 
 // material ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-// import Avatar from 'material-ui/Avatar';
+import Snackbar from 'material-ui/Snackbar';
 
 class Profile extends Component {
 	state = {
@@ -73,6 +71,20 @@ class Profile extends Component {
         
     };
 
+    // snackbar function
+    handleClick = () => {
+        this.setState({
+          open: true,
+        });
+    };
+
+    // snackbar function
+    handleRequestClose = () => {
+        this.setState({
+          open: false,
+        });
+    };
+
     // checking if the user viewing the page is the onwer of the collection
     userSpecific = () => {
         if ( this.state.user.id === this.state.currentUser.id) {
@@ -101,6 +113,7 @@ class Profile extends Component {
         })
         .then(res => console.log('friend added'))
         .catch(err => console.log(err));
+        this.handleClick();
     };
 
     // deletes friends
@@ -257,6 +270,14 @@ class Profile extends Component {
                         )}
                 </div>
             </div>
+            <MuiThemeProvider>
+                <Snackbar
+                    open={this.state.open}
+                    message="Friend Added!"
+                    autoHideDuration={4000}
+                    onRequestClose={this.handleRequestClose}
+                />
+                </MuiThemeProvider>
             </MuiThemeProvider>
 		);
 	}
