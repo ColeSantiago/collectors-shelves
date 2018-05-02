@@ -400,6 +400,7 @@ router.post("/unfriend", function(req, res) {
     })
 });
 
+// the search route. looks for photos with titles similar to the titles
 router.post("/dashboard", function(req, res) {
     console.log(req.body);
     models.collection_photos.findAll({

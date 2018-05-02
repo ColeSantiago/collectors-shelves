@@ -7,7 +7,7 @@ import "./EditPhoto.css";
 
 // components
 import Wrapper from "../../components/Wrapper";
-import Nav from "../../components/Nav";
+// import Nav from "../../components/Nav";
 import { Input, EditPhotoBtn } from "../../components/EditPhotoForm";
 
 // material ui
@@ -77,9 +77,6 @@ class EditPhoto extends Component {
 	render() {
 		return (
 		  <Wrapper>
-            <MuiThemeProvider>
-                <Nav />
-            </MuiThemeProvider>
             <img src={this.state.photo.photo_link} alt={this.state.photo.photo_link} />
             <MuiThemeProvider>
                 <form>

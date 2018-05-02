@@ -70,8 +70,8 @@ footer {
 }
 
 .to-dashboard {
-	margin-top: 90px;
-	padding: 50px;
+	margin-top: 100px;
+	padding: 30px;
 	text-decoration: none;
 	color: #a02e2e;
 	background: white;
@@ -91,9 +91,11 @@ footer {
 	transform: scale(0.9);
 }
 
-button {
-	padding: 15px;
+.signout-div {
+	background: white;
+	display: inline-flex;
 	margin: 15px;
+	float: left;
+	border-radius: 50%;
 }
-
 

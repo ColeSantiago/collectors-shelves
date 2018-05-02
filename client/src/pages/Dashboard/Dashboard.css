@@ -1,31 +1,42 @@
 .dashboard-wrapper {
 	display: grid;
 	grid-template-areas: 
-	"signout signout .  . header header"
-	"profile profile profile article article article"
-	"photo photo photo photo photo photo";
+	". . . . user user"
+	"article article article photo photo photo";
+}
+
+.user-area {
+    grid-area: user;
+    display: inline-flex;
+    background: #555;
+    background-repeat: no-repeat;
+    padding:15px;
+    margin-bottom: 15px;
+    margin-right: 60px;
+    margin-top: 15px;
+    box-shadow: 0 0 20px 0px #555;
 }
 
 .user-info {
-	grid-area: header;
+	font-size: 25px;
+	padding: 3px;
 }
 
 .go-to-profile {
-	grid-area: profile;
-	margin-top: 250px;
-	background: white;
-	max-height: 20px;
-	padding: 20px;
-	font-size: 30px;
+	font-size: 25px;
 	text-decoration: none;
+	margin-left: 15px;
 	border-radius: 10px;
-	color: #a02e2e;
-	border: 1px solid black;
+	padding: 3px;
+	background: #a02e2e;
+	color: white;
 }
 
 .go-to-profile:hover {
-	background: #a02e2e;
-	color: white;
+	background: white;
+	color: #a02e2e;
+	border-radius: 10px;
+	padding: 3px;
 }
 
 .article-div {
@@ -35,38 +46,64 @@
 	background: white;
 	overflow: scroll;
 	padding: 30px;
-	margin-left: 220px;
+	margin-left: 20px;
 	box-shadow: 2px 3px 23px #000;
 }
 
-.activity-div {
+.activity-div, .search-div {
 	grid-area: photo;
-	margin-top: 40px;
-	margin-left: 140px;
-	/*background: white;*/
-	/*overflow: scroll;*/
-	/*max-height: 500px;*/
+	margin-left: 60px;
+	margin-right: 60px;
+	background: white;
 	max-width: 740px;
 	text-align: center;
+	padding: 60px;
+	margin-bottom: 95px;
+	box-shadow: 0 0 2px 0px white;
 }
 
-.user-info {
-	background: white;
-	font-size: 25px;
-	padding: 30px;
-	margin-bottom: 15px;
-	/*width: 200px;*/
+.article-title {
 	text-align: center;
-	border-radius: 50%;
+	font-size: 25px;
+	margin: 15px;
+	text-decoration: underline;
 }
 
-.signout-div {
-	grid-area: signout;
-
+a {
+	color: black;
 }
 
-.search-div {
-	grid-area: photo;
-	margin: 0 auto;
+a:hover {
+	color: #bdb928
+}
+
+.title {
+	font-size: 40px;
+	margin-bottom: 15px;
+}
+
+.recent-activity {
+	font-size: 30px;
+	margin-bottom: 25px;
+}
+
+.load-more-btn, .search-btn {
+	background: #555;
+	color: white;
+	padding: 10px;
+	box-shadow: 1px 1px 6px #000;
+	border: none;
+	margin-top: 15px;
+	font-size: 15px;
+}
+
+.load-more-btn:hover, .search-btn:hover {
+	background: white;
+	color: #555;
+	cursor: pointer;
+}
+
+.no-results {
+	margin-top: 20px;
 }
 

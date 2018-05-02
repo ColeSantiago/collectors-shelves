@@ -1,5 +1,14 @@
 .collection-photo {
 	max-width: 680px;
-	margin: 10px;
+	margin: 15px;
 	box-shadow: 2px 3px 23px #000;
+}
+
+.photo-title {
+	font-size: 20px;
+	text-decoration: none;
+}
+
+.li-photo-dashboard {
+	
 }

@@ -14,10 +14,10 @@ import { NotificationList, NotificationListItem } from "../../components/Notific
 import Wrapper from "../../components/Wrapper";
 import DeleteCollectBtn from "../../components/DeleteCollectBtn";
 import AddFriendBtn from "../../components/AddFriendBtn";
-import Nav from "../../components/Nav";
+// import Nav from "../../components/Nav";
 
 // material ui
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+// import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class Profile extends Component {
 	state = {
@@ -131,9 +131,6 @@ class Profile extends Component {
 	render() {
 		return (
             <Wrapper>
-                <MuiThemeProvider>
-                    <Nav username={this.state.user.username} id={this.state.user.id}/>
-                </MuiThemeProvider>
                 {this.state.user.photo === null ? <img src={Placeholder} alt="profile" /> :
                     <div>
                         <img className="profile-pic" src={this.state.user.photo} alt="Actual Profile"/>

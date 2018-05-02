@@ -9,7 +9,7 @@ import "./EditProfile.css";
 
 // components
 import Wrapper from "../../components/Wrapper";
-import Nav from "../../components/Nav";
+// import Nav from "../../components/Nav";
 import { Input, UserDetailsBtn } from "../../components/UserDetailsForm";
 
 // material ui
@@ -80,9 +80,6 @@ class EditPhoto extends Component {
 	render() {
 		return (
 		  <Wrapper>
-            <MuiThemeProvider>
-                <Nav />
-            </MuiThemeProvider>
             <Dropzone
                 multiple={false}
                 accept="image/*"

@@ -7,7 +7,7 @@ import "./Dashboard.css";
 
 // components
 import Wrapper from "../../components/Wrapper";
-import Nav from "../../components/Nav";
+// import Nav from "../../components/Nav";
 import { List, ListItem } from "../../components/ArticleList";
 import { SearchInput, SearchFormBtn } from "../../components/SearchForm";
 import { PhotoList, PhotoListItem } from "../../components/PhotoListDashboard";
@@ -104,17 +104,19 @@ class Dashboard extends Component {
 		return (
             <MuiThemeProvider>
     		  <Wrapper>
-                <div className="dashboard-wrapper"> 
-                    <div className="user-info">  
-                        <Nav username={this.state.user.username} id={this.state.user.id}/>
-                        <h1>Hey {this.state.user.username}</h1>
+                <div className="dashboard-wrapper">
+                    <div className="user-area">
+                        <div className="user-info">  
+                            <h1>Hey {this.state.user.username}</h1>
+                        </div>
+                      	<Link className="go-to-profile" to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
+                            Go To Your Profile
+                        </Link>
                     </div>
-                  	<Link className="go-to-profile" to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
-                        Go To Your Profile
-                    </Link>
                     <div className="article-div">
                         {this.state.articles.length ? (
                             <List>
+                                <h1 className="article-title">Recent Articles from <a href="http://news.toyark.com/" rel="noopener noreferrer" target="_blank">Toyark.com</a></h1>
                                 {this.state.articles.slice(0, this.state.articleLimit).map(article => (
                                     <ListItem 
                                         key={article.id} 
@@ -138,6 +140,8 @@ class Dashboard extends Component {
                                 />
                                 {this.state.activity.length ? (
                                     <PhotoList>
+                                        <div className="title">Collector's Shelves</div>
+                                        <h1 className="recent-activity">Recent User Activity</h1>
                                         {this.state.activity.slice(0, this.state.photoLimit).map(photo => (
                                             <PhotoListItem 
                                                 key={photo.id}
@@ -170,7 +174,7 @@ class Dashboard extends Component {
                                             name="searchText"
                                             floatingLabelText="Search"
                                           /> 
-                                        <SearchFormBtn onClick={this.handleSearchSubmit} />
+                                        <SearchFormBtn className="search-btn" onClick={this.handleSearchSubmit} />
                                     </form>
                                     {this.state.searchResults.length ? (
                                         <PhotoList>
@@ -189,7 +193,7 @@ class Dashboard extends Component {
                                                 </button>
                                         </PhotoList>
                                     ): (
-                                        <p>No Results. Add titles to your photos so people can discover you!</p>
+                                        <p className="no-results">No Results. Add titles to your photos so people can discover you!</p>
                                 )}
                                 </div>
                             )}

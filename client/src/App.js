@@ -4,6 +4,10 @@ import { Redirect, withRouter } from "react-router";
 
 import VerticalNonLinear from "./components/VerticalNonLinear"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import API from "./API";
 import "./App.css";
@@ -24,11 +28,23 @@ import EditProfile from "./pages/EditProfile";
 // the sign out button
 const AuthButton = withRouter(({ history }) => (
   Auth.isAuthenticated ? (
-    <p className="signout-div">
-      <button onClick={() => {
-        Auth.signout(() => history.push('/'))
-      }}>Sign out</button>
-    </p>
+    <MuiThemeProvider>
+        <div className="signout-div">
+            <IconMenu
+              iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            >
+                <Link className="navbar-link" to="/dashboard">
+                    <MenuItem primaryText="Home"/>
+                </Link>
+                <MenuItem 
+                    onClick={() => {
+                        Auth.signout(() => history.push('/'))
+                    }} primaryText="Sign Out" />
+            </IconMenu> 
+        </div>
+    </MuiThemeProvider>
   ) : (
     null
   )

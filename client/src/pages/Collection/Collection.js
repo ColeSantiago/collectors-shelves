@@ -13,15 +13,7 @@ import DeletePhotoBtn from "../../components/DeletePhotoBtn";
 
 // material ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import SvgIcon from 'material-ui/SvgIcon';
-import {blue500, red500} from 'material-ui/styles/colors';
 import Snackbar from 'material-ui/Snackbar';
-
-const HomeIcon = (props) => (
-  <SvgIcon {...props}>
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-  </SvgIcon>
-);
 
 // cloudinary info
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
@@ -134,11 +126,6 @@ class Collection extends Component {
 	render() {
 		return (
 			<Wrapper>
-				<MuiThemeProvider>
-					<Link className="navbar-link" to="/dashboard">
-						<HomeIcon color={red500} hoverColor={blue500} />
-	    			</Link>
-    			</MuiThemeProvider>
 				<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
 					{this.state.user.username}
 				</Link>
