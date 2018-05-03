@@ -133,7 +133,6 @@ class SignIn extends Component {
     render() {
         return(
             <div className="wrapper">
-               
                 <MuiThemeProvider>
                     {this.state.redirectToReferrer === false ?
                         <div className="sign-in-div">

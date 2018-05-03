@@ -15,6 +15,7 @@ import DeletePhotoBtn from "../../components/DeletePhotoBtn";
 // material ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Snackbar from 'material-ui/Snackbar';
+// import CircularProgress from 'material-ui/CircularProgress';
 
 // cloudinary info
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
@@ -140,67 +141,67 @@ class Collection extends Component {
 
 	render() {
 		return (
-			<Wrapper>
-				<div className="owner-div">
-					<p className="blongs-to">This collection belongs to </p>
-					<Link className="blongs-to" to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
-						{this.state.user.username}
-					</Link>
-					<h1>{this.state.collectionInfo.title}</h1>
-					<h2>{this.state.collectionInfo.description}</h2>
-				</div>
-				{this.state.isUser ? (
-					<div className="dropzone-div">
-						<Dropzone
-							multiple={false}
-							accept="image/*"
-							onDrop={this.onImageDrop.bind(this)}
-						>
-							<p className="drop-text">Drop an image or click select a file to upload. </p>
-						</Dropzone>
+			<MuiThemeProvider>
+				<Wrapper>
+					<div className="owner-div">
+						<p className="blongs-to">This collection belongs to </p>
+						<Link className="blongs-to" to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
+							{this.state.user.username}
+						</Link>
+						<h1>{this.state.collectionInfo.title}</h1>
+						<h2>{this.state.collectionInfo.description}</h2>
 					</div>
-				) : (
-		                null
-					)}
-					<div className="collections">
-		                {this.state.photos.length ? (
-		                    <PhotoList>
-		                        {this.state.photos.slice(0, this.state.photoLimit).map(photo => (
-		                            <PhotoListItem 
-		                                key={photo.id}
-		                                id={photo.id} 
-		                                url={photo.photo_link}
-		                                title={photo.title}     
-		                            >
-		                            {this.state.isUser ? (
-		                            	<div>
-		                            		<Link to={`/editphoto/${photo.id}`}>
-		                            			<button className="edit-photo-btn">Add Title</button>
-		                            		</Link>
-		                            		<DeletePhotoBtn className="delete" onClick={() => this.deletePhoto(photo.id)} />
-		                            	</div>
-		                            	) : (
-		                            			null
-											)}
-		                            </PhotoListItem>
-		                        ))}
-		                        <button className="load-more-btn" onClick={this.loadMore.bind(this)}>
-                                    Load More
-                                </button>
-		                    </PhotoList>
-		                ) : (
-		                <h3 className="warning">There are no photos here yet!</h3>
-		                )}
-		            </div>
-		        <MuiThemeProvider>
-	                <Snackbar
-	                  open={this.state.open}
-	                  message="Photo Uploaded, give it a second"
-	                  autoHideDuration={4000}
-	                  onRequestClose={this.handleRequestClose}
-	                />
-	            </MuiThemeProvider>
-			</Wrapper>
+					{this.state.isUser ? (
+						<div className="dropzone-div">
+							<Dropzone
+								multiple={false}
+								accept="image/*"
+								onDrop={this.onImageDrop.bind(this)}
+							>
+								<p className="drop-text">Drop an image or click select a file to upload. </p>
+							</Dropzone>
+						</div>
+					) : (
+			                null
+						)}
+						<div className="collections">
+			                {this.state.photos.length ? (
+			                    <PhotoList>
+			                        {this.state.photos.slice(0, this.state.photoLimit).map(photo => (
+			                            <PhotoListItem 
+			                                key={photo.id}
+			                                id={photo.id} 
+			                                url={photo.photo_link}
+			                                title={photo.title}     
+			                            >
+			                            {this.state.isUser ? (
+			                            	<div>
+			                            		<Link to={`/editphoto/${photo.id}`}>
+			                            			<button className="edit-photo-btn">Add Title</button>
+			                            		</Link>
+			                            		<DeletePhotoBtn className="delete" onClick={() => this.deletePhoto(photo.id)} />
+			                            	</div>
+			                            	) : (
+			                            			null
+												)}
+			                            </PhotoListItem>
+			                        ))}
+			                        <button className="load-more-btn" onClick={this.loadMore.bind(this)}>
+	                                    Load More
+	                                </button>
+			                    </PhotoList>
+			                ) : (
+			                <h3 className="warning">There are no photos here yet!</h3>
+			                )}
+			            </div>
+		                <Snackbar
+		                  open={this.state.open}
+		                  message="Photo Uploaded, give it a second"
+		                  autoHideDuration={4000}
+		                  onRequestClose={this.handleRequestClose}
+		                />
+				</Wrapper>
+			</MuiThemeProvider>
 		);
 	}
 }

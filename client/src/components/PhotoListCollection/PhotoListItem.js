@@ -7,7 +7,6 @@ export const PhotoListItem = props => (
 	   {props.title}
 	   {props.children}
   </li>
-
 );
 
 

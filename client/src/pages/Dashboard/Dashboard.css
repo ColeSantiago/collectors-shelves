@@ -60,6 +60,7 @@
 	padding: 60px;
 	margin-bottom: 95px;
 	box-shadow: 0 0 2px 0px white;
+	border-bottom: 3px solid #5757bb;
 }
 
 .article-title {

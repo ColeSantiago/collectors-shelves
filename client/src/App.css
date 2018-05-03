@@ -9,8 +9,7 @@
 
 .wrapper {
 	display: grid;
-	justify-content: center;
-	
+	justify-content: center;	
 }
 
 .sign-in-div {
@@ -24,8 +23,7 @@
 	margin: 20px;
 	padding: 50px;
 	border-radius: 20px;
-	box-shadow: 2px 3px 23px #000;
-	
+	box-shadow: 2px 3px 23px #000;	
 }
 
 .sign-in-form {

@@ -193,11 +193,11 @@ class Dashboard extends Component {
                                                 </button>
                                         </PhotoList>
                                     ): (
-                                        <p className="no-results">No Results. Add titles to your photos so people can discover you!</p>
-                                )}
+                                            <p className="no-results">No Results. Add titles to your photos so people can discover you!</p>
+                                        )}
                                 </div>
                             )}
-                    </div>
+                    </div>        
     		  </Wrapper>
           </MuiThemeProvider>
 		);

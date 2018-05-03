@@ -186,9 +186,6 @@ router.get("/profile/:username/:id", function(req, res) {
                 model: models.user_collection,
                 where: {userId: req.params.id},
                 attributes: ["title", "description", "userId", "id"],
-                order: [
-                    ['id', 'DESC']
-                ]
             }, 
             {
                 model: models.user_friends,
@@ -200,6 +197,11 @@ router.get("/profile/:username/:id", function(req, res) {
                 where: {userId: req.params.id},
                 attributes: ["message", "friendId", "friendUsername", "id"]
             }
+        ],
+        order: [
+            [models.user_collection, 'id', 'DESC'],
+            [models.user_notifications, 'id', 'DESC'],
+            [models.user_friends, 'id', 'DESC'],
         ]
     })
     .then(function(results) {
@@ -252,14 +254,11 @@ router.get("/collection/:id", function(req, res) {
                 model: models.collection_photos,
                 where: {collectionId: req.params.id},
                 attributes: ["photo_link", "id", "title"],
-                order: [
-                    ['id', 'DESC']
-                ]
             }
         ],
          order: [
-        [models.collection_photos, 'id', 'DESC']
-    ]
+            [models.collection_photos, 'id', 'DESC']
+        ]
     })
     .then(function(results) {
         // finding the user the collection belongs to

@@ -9,13 +9,12 @@
 	"friends . . collection collection  ."
 	". . . collection collection  .";
 	box-shadow: 0 0 2px 0px white;
-
+	border-bottom: 3px solid #5757bb;
 }
 
 .profile-pic {
 	border-radius: 50%;
 	max-width: 200px;
-
 }
 
 .about-user {
@@ -25,6 +24,7 @@
 	background: #9a9a9a;
 	padding: 15px;
 	border-radius: 10px;
+	border-bottom: 3px solid #5757bb;
 }
 
 .friends-div {
