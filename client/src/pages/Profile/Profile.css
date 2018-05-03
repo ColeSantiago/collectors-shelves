@@ -75,7 +75,7 @@
 	opacity: 1;
 }
 
-.edit-profile-btn, .add-friend-btn {
+.edit-profile-btn, .add-friend-btn, .edit-photo-btn {
 	padding: 5px;
 	font-size: 15px;
 	border: none;
@@ -84,7 +84,7 @@
 	margin: 15px;
 }
 
-.edit-profile-btn:hover, .add-friend-btn:hover {
+.edit-profile-btn:hover, .add-friend-btn:hover, .edit-photo-btn:hover {
 	opacity: 0.8;
 	cursor: pointer;
 }

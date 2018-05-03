@@ -34,6 +34,7 @@ class Collection extends Component {
 			currentUser: [],
 			open: false,
 			isUser: false,
+			photoLimit: 10,
 		};
 	};
 
@@ -46,15 +47,28 @@ class Collection extends Component {
 		API.loadCollection(this.props.match.params.id)
 		.then(res =>  {
 			this.setState({
-			collectionInfo: res.data.collectionInfo,
-			photos: res.data.photos,
-			user: res.data.user[0],
-			currentUser: res.data.currentUser[0]
+				collectionInfo: res.data.collectionInfo,
+				photos: res.data.photos,
+				user: res.data.user[0],
+				currentUser: res.data.currentUser[0]
 			})
 			this.userSpecific();
 		})
 		.catch(err => console.log(err));
 	};
+
+	// loads 10 more photos to the dashboard when clicked
+    loadMore () {
+        this.setState({photoLimit: this.state.photoLimit + 10});
+        this.getCollection();
+    };
+
+    handleInputChange = event => {
+        const { name, value } = event.target;
+        this.setState({
+          [name]: value
+        });
+    };
 
 	// checking if the user viewing the page is the onwer of the collection
 	userSpecific = () => {
@@ -127,11 +141,14 @@ class Collection extends Component {
 	render() {
 		return (
 			<Wrapper>
-				<Link to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
-					{this.state.user.username}
-				</Link>
-				<h1>{this.state.collectionInfo.title}</h1>
-				<h2>{this.state.collectionInfo.description}</h2>
+				<div className="owner-div">
+					<p className="blongs-to">This collection belongs to </p>
+					<Link className="blongs-to" to={`/profile/${this.state.user.username}/${this.state.user.id}`}>
+						{this.state.user.username}
+					</Link>
+					<h1>{this.state.collectionInfo.title}</h1>
+					<h2>{this.state.collectionInfo.description}</h2>
+				</div>
 				{this.state.isUser ? (
 					<div className="dropzone-div">
 						<Dropzone
@@ -139,7 +156,7 @@ class Collection extends Component {
 							accept="image/*"
 							onDrop={this.onImageDrop.bind(this)}
 						>
-							<p className="warning">Drop an image or click select a file to upload. </p>
+							<p className="drop-text">Drop an image or click select a file to upload. </p>
 						</Dropzone>
 					</div>
 				) : (
@@ -148,7 +165,7 @@ class Collection extends Component {
 					<div className="collections">
 		                {this.state.photos.length ? (
 		                    <PhotoList>
-		                        {this.state.photos.map(photo => (
+		                        {this.state.photos.slice(0, this.state.photoLimit).map(photo => (
 		                            <PhotoListItem 
 		                                key={photo.id}
 		                                id={photo.id} 
@@ -157,17 +174,22 @@ class Collection extends Component {
 		                            >
 		                            {this.state.isUser ? (
 		                            	<div>
-		                            		<Link to={`/editphoto/${photo.id}`}>Edit Photo</Link>
-		                            		<DeletePhotoBtn onClick={() => this.deletePhoto(photo.id)} />
+		                            		<Link to={`/editphoto/${photo.id}`}>
+		                            			<button className="edit-photo-btn">Add Title</button>
+		                            		</Link>
+		                            		<DeletePhotoBtn className="delete" onClick={() => this.deletePhoto(photo.id)} />
 		                            	</div>
 		                            	) : (
 		                            			null
 											)}
 		                            </PhotoListItem>
 		                        ))}
+		                        <button className="load-more-btn" onClick={this.loadMore.bind(this)}>
+                                    Load More
+                                </button>
 		                    </PhotoList>
 		                ) : (
-		                <h3>There are no photos here yet!</h3>
+		                <h3 className="warning">There are no photos here yet!</h3>
 		                )}
 		            </div>
 		        <MuiThemeProvider>

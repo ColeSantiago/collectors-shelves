@@ -77,7 +77,7 @@ class EditPhoto extends Component {
 	render() {
 		return (
 		  <Wrapper>
-            <img src={this.state.photo.photo_link} alt={this.state.photo.photo_link} />
+            <img className="edit-photo-img" src={this.state.photo.photo_link} alt={this.state.photo.photo_link} />
             <MuiThemeProvider>
                 <form>
                     <Input

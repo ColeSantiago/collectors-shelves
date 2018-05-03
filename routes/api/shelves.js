@@ -256,7 +256,10 @@ router.get("/collection/:id", function(req, res) {
                     ['id', 'DESC']
                 ]
             }
-        ]
+        ],
+         order: [
+        [models.collection_photos, 'id', 'DESC']
+    ]
     })
     .then(function(results) {
         // finding the user the collection belongs to

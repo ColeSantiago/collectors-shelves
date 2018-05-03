@@ -1,0 +1,19 @@
+.owner-div {
+	text-align: center;
+	background: white;
+	padding: 10px;
+	margin: 15px;
+	line-height: 30px;
+	font-size: 25px;
+	box-shadow: 0 0 2px 0px white;
+	border-bottom: 3px solid #5757bb;
+}
+
+.collections {
+	background: white;
+	padding: 20px;
+	text-align: center;
+	margin: 20px;
+	font-size: 20px;
+	line-height: 20px;
+}

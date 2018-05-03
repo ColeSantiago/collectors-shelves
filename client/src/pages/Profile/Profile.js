@@ -28,7 +28,8 @@ class Profile extends Component {
         notifications: [],
         currentUser: [],
         isUser: false,
-        isClicked: false
+        isClicked: false,
+        open: false
 	};
 
     componentDidMount() {
@@ -269,15 +270,13 @@ class Profile extends Component {
                             <h3>Click the button above to start sharing your collections!</h3>
                         )}
                 </div>
-            </div>
-            <MuiThemeProvider>
                 <Snackbar
                     open={this.state.open}
                     message="Friend Added!"
                     autoHideDuration={4000}
                     onRequestClose={this.handleRequestClose}
-                />
-                </MuiThemeProvider>
+                /> 
+            </div>  
             </MuiThemeProvider>
 		);
 	}
