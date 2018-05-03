@@ -46,3 +46,15 @@
 .nevermind-link:hover {
 	color: black;
 }
+
+.start {
+    font-size: 40px;
+    margin: 30px;
+    color: white;
+    font-family: 'Audiowide', cursive;
+        text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}

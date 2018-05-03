@@ -25,13 +25,11 @@ router.post("/signup", (req, res) => {
             models.user_collection.create({
                 userId: result.dataValues.id,
                 title: "My Favorite Things That I Own",
-                description: "Load your favorites here!",
             }).then(function(favCollectionResult) {
                 // creating a things i want collection
                 models.user_collection.create({
                     userId: result.dataValues.id,
                     title: "Things I Want",
-                    description: "Put things you want to own here!",
                 }).then(function(wantCollectionResult) {
                     // creating a temp photo entry for the want collection we just made
                     models.collection_photos.create({
@@ -48,13 +46,13 @@ router.post("/signup", (req, res) => {
                             // creating a temp photo friend
                             models.user_friends.create({
                                 userId: result.dataValues.id,
-                                username: "Add some friends!"
+                                username: "Follow some people!"
                             })
                             .then(function(friendResult) {
                                 // creating a welcome message for the notification area
                                 models.user_notifications.create({
                                     userId: result.dataValues.id,
-                                    message: "Welcome to collectorshelves.com!"
+                                    message: "Welcome to collector-shelves.com!"
                                 })
                                 .then(function(notificationResult) {
                                     // sends a welcome email to the email provided
@@ -285,13 +283,20 @@ router.get("/collection/:id", function(req, res) {
 
 // deletes collections with the id
 router.post("/deletecollection", function(req, res) {
-    models.user_collection.destroy({
-        where: {id: req.body.id}
+    console.log(req.body.id)
+    models.collection_photos.destroy({
+        where: {collectionId: req.body.id}
     })
-    .then(function(results) {
-        console.log("deleted");
-    })
-})
+    .then(function(result) {
+        models.user_collection.destroy({
+            where: {id: req.body.id}
+        })
+        .then(function(results) {
+            res.json(results)
+            console.log("deleted");
+        })
+    })  
+});
 
 // saves all of the photo data in the database
 router.post("/photoupload", function(req, res) {
@@ -302,6 +307,7 @@ router.post("/photoupload", function(req, res) {
         likes: 0 
     })
     .then(function(results) {
+        res.json(results);
         console.log("photo uploaded");
     })
 });
@@ -314,6 +320,7 @@ router.post("/photodelete", function(req, res) {
         }
     })
     .then(function(results) {
+        res.json(results);
         console.log("Photo deleted")
     })
 });
@@ -339,6 +346,7 @@ router.post("/edittitle", function(req, res) {
         where: {id: req.body.id}
     })
     .then(function(result) {
+        res.json(result);
         console.log("title changed");
     })
 });
@@ -361,6 +369,7 @@ router.post("/addclap", function(req, res) {
             message: `${req.body.username} applauded you!`
         })
         .then(function(subResult) {
+            res.json(subResult);
             console.log('clap');
         })
     })
@@ -383,6 +392,7 @@ router.post("/addfriend", function(req, res) {
             message: `${req.body.friendUsername} added you!`
         })
         .then(function(subResult) {
+            res.json(subResults);
             console.log('friend added');
         })   
     })
@@ -398,6 +408,7 @@ router.post("/unfriend", function(req, res) {
         }
     })
     .then(function(result) {
+        res.json(result);
         console.log("unfriend");
     })
 });
@@ -435,7 +446,7 @@ function sendEmail(newUser){
       from: "collectorshelve@gmail.com",
       to: newUser.email,
       subject: "Hey Collector!",
-      text: "Welcome to your virtual shelves! Have fun collecting and connecting - Cole"
+      text: "Welcome to your virtual shelves, have fun collecting - Cole"
     };
 
     transporter.sendMail(mailOptions, function(error, info){

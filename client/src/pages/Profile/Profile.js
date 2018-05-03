@@ -60,7 +60,6 @@ class Profile extends Component {
     getNextUser = (username, id) => {
         API.getUserProfile(username, id)
         .then(res => {
-            console.log(res)
             this.setState({
                 user: res.data.user,
                 bio: res.data.user.bio,
@@ -71,8 +70,7 @@ class Profile extends Component {
             })
             this.userSpecific();
         })
-        .catch(err => console.log(err));
-        
+        .catch(err => console.log(err));  
     };
 
     // snackbar function
@@ -103,9 +101,8 @@ class Profile extends Component {
         API.deleteCollection({
             id: id
         })
-        .then(res => console.log("collection deleted"))
-        .catch(err => console.log(err));
-        this.getUserAndCollections();
+        .then(res => this.getUserAndCollections())
+        .catch(err => console.log(err));     
     };
 
     // adds friends
@@ -115,9 +112,8 @@ class Profile extends Component {
             username: username,
             friendUsername: friendUsername
         })
-        .then(res => console.log('friend added'))
-        .catch(err => console.log(err));
-        this.handleClick();
+        .then(res => this.handleClick())
+        .catch(err => console.log(err));  
     };
 
     // deletes friends
@@ -125,9 +121,8 @@ class Profile extends Component {
         API.deleteFriend({
             friendId: id
         })
-        .then(res => console.log("unfriended"))
-        .catch(err => console.log(err));
-        this.getUserAndCollections();
+        .then(res => this.getUserAndCollections())
+        .catch(err => console.log(err));    
     }
 
     // handles the clap function
@@ -138,9 +133,8 @@ class Profile extends Component {
                 id: userId,
                 username: username
             })
-            .then(res => console.log('clap'))
-            .catch(err => console.log(err));
-            this.getUserAndCollections();
+            .then(res => this.getUserAndCollections())
+            .catch(err => console.log(err));   
         } else {
             console.log("disliked")
             this.setState({isClicked: false})
@@ -207,7 +201,7 @@ class Profile extends Component {
                     <div className="friends-div">
                         {this.state.friends.length ? (
                            <List>
-                           <Subheader>Followers</Subheader>
+                           <Subheader>Following</Subheader>
                                 {this.state.friends.map(friend => (    
                                     <ListItem
                                         key={friend.friendId}

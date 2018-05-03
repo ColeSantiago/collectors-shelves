@@ -11,6 +11,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import API from "./API";
 import "./App.css";
+import Favicon from 'react-favicon';
 
 // components
 import { Input, SignInBtn } from "./SignInForm";
@@ -133,6 +134,7 @@ class SignIn extends Component {
     render() {
         return(
             <div className="wrapper">
+                <h1 className="title">Collector-Shelves.com</h1>
                 <MuiThemeProvider>
                     {this.state.redirectToReferrer === false ?
                         <div className="sign-in-div">
@@ -183,6 +185,7 @@ class SignIn extends Component {
 const App = () => (
   <Router>
     <div>
+        <Favicon url="https://www.favicon.cc/logo3d/77885.png" />
         <AuthButton />
         <Switch>
    		   <Route exact path="/" component={SignIn} />

@@ -49,7 +49,7 @@ class SignUp extends Component {
   render() {
     return (
       <div>
-      <h1>Start showing off your collection!</h1>
+      <h1 className="start">Start showing off your collection!</h1>
         <MuiThemeProvider>
           <form className="sign-up-form">
               <Input

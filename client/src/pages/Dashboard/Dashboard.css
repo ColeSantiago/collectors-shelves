@@ -108,3 +108,58 @@ a:hover {
 	margin-top: 20px;
 }
 
+/*mobile view*/
+
+@media only screen and (max-width: 1303px) {
+	.activity-div, .search-div {
+		max-width: 540px;
+		margin-top: 50px;
+	}
+
+	.dashboard-wrapper {
+		display: grid;
+		grid-template-areas: 
+		". . . . user user"
+		". article article article . ."
+		". photo photo photo . .";
+	}
+
+	.article-div {
+		margin-left: 60px;
+	}
+
+
+}
+
+@media only screen and (max-width: 768px) {
+	.dashboard-wrapper {
+		display: grid;
+		grid-template-areas: 
+		". . user . . ."
+		". article article article . ."
+		". photo photo photo . .";
+	}
+}
+
+@media only screen and (max-width: 375px) {
+	.dashboard-wrapper {
+		display: grid;
+		grid-template-areas: 
+		". . . user  . ."
+		". . article article . ."
+		". . photo photo . .";
+	}
+
+	.article-div {
+		justify-self: center;
+		margin-left: 0px;
+		max-width: 400px;	
+	}
+
+	.activity-div, .search-div {
+		max-width: 310px;
+    	margin-right: 0px;
+    	margin-left: 0px;
+	}  
+}
+

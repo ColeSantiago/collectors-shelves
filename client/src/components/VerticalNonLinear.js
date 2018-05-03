@@ -55,7 +55,7 @@ class VerticalNonLinear extends React.Component {
     const {stepIndex} = this.state;
 
     return (
-      <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
+      <div style={{maxWidth: 700, maxHeight: 500, margin: 'auto'}}>
         <Stepper
           activeStep={stepIndex}
           linear={false}
@@ -66,7 +66,7 @@ class VerticalNonLinear extends React.Component {
               Create an Account
             </StepButton>
             <StepContent>
-              <p>Joinnnnnnnnnn</p>
+              <img src="https://media.giphy.com/media/u45iIi2g8EHoNYrmZU/giphy.gif" alt="sign up" />
               {this.renderStepActions(0)}
             </StepContent>
           </Step>
@@ -75,7 +75,7 @@ class VerticalNonLinear extends React.Component {
               Share your collections
             </StepButton>
             <StepContent>
-              <p>Shareeeeeeeeeee</p>
+              <img src="https://media.giphy.com/media/wp096tUDtuaT4K5fkF/giphy.gif" alt="Share" />
               {this.renderStepActions(1)}
             </StepContent>
           </Step>
@@ -84,7 +84,7 @@ class VerticalNonLinear extends React.Component {
               Discover new things and make friends
             </StepButton>
             <StepContent>
-              <p>Friendsssssssssssss</p>
+              <img src="https://media.giphy.com/media/tZYgxd5PXc7o5aY8uJ/giphy.gif" alt="Discover" />
               {this.renderStepActions(2)}
             </StepContent>
           </Step>

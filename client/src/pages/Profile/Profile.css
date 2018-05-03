@@ -4,12 +4,13 @@
 	margin: 30px;
 	display: grid;
 	grid-template-areas: 
-	"user . . collection collection . "
-	"notifications . . collection collection  ."
-	"friends . . collection collection  ."
+	". user  . collection collection . "
+	". notifications . collection collection  ."
+	". friends . collection collection  ."
 	". . . collection collection  .";
 	box-shadow: 0 0 2px 0px white;
 	border-bottom: 3px solid #5757bb;
+	padding: 30px;
 }
 
 .profile-pic {
@@ -91,4 +92,26 @@
 
 .notification-title {
 	font-size: 30px;
+}
+
+/*mobile view*/
+
+@media only screen and (max-width: 768px) {
+	.profile-wrapper {
+		grid-template-areas: 
+		"user user . . . . "
+		"notifications notifications . . .  ."
+		"friends friends . . . ."
+		"collection collection . . . ."
+		"collection collection . . . ."
+		"collection collection . . . .";
+		justify-content: center;
+	}
+	
+}
+
+@media only screen and (max-width: 375px) {
+	.collection-photo {
+		max-width: 310px;
+	}
 }

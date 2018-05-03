@@ -14,20 +14,17 @@
 
 .sign-in-div {
 	animation: 1.5s ease-out 0s 1 slideInFromLeft;
+	display: inline-flex;
+	margin-top: 50px;
 }
 
 .vertical {
-	height: 280px;
 	max-width: 400px;
 	background: white;
 	margin: 20px;
 	padding: 50px;
 	border-radius: 20px;
 	box-shadow: 2px 3px 23px #000;	
-}
-
-.sign-in-form {
-	padding: 70px;
 }
 
 form {
@@ -41,16 +38,9 @@ form {
 	box-shadow: 2px 3px 23px #000;
 }
 
-footer {
-	background: gray;
-	position: absolute;
-	left: 0px;
-	right: 0px;
-	width: 100%;
-	text-align: center;
-	padding: 30px;
-	border-top: 2px solid black;
-	box-shadow: 4px 3px 11px #000;
+.sign-in-form {
+	padding: 70px;
+	height: 200px;
 }
 
 .sign-in {
@@ -69,7 +59,8 @@ footer {
 
 .to-dashboard {
 	margin-top: 100px;
-	padding: 30px;
+	padding: 20px;
+	max-width: 400px;
 	text-decoration: none;
 	color: #a02e2e;
 	background: white;
@@ -78,6 +69,7 @@ footer {
 	text-align: center;
 	line-height: 50px;
 	box-shadow: 4px 3px 11px #000;
+	justify-self: center;
 }
 
 .to-dashboard:hover {
@@ -95,5 +87,17 @@ footer {
 	margin: 15px;
 	float: left;
 	border-radius: 50%;
+}
+
+.title {
+	margin: 30px;
+	color: white;
+	font-family: 'Audiowide', cursive;
+	text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+
 }
 
