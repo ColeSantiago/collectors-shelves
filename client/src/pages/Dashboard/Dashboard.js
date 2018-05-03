@@ -53,7 +53,7 @@ class Dashboard extends Component {
 	};
 
     componentDidMount() {
-        setTimeout(() => this.setState({ loading: false }), 1500);
+        setTimeout(() => this.setState({ loading: false }), 4000);
   		this.getcurrentUserAndActivity();
   	};		
 
