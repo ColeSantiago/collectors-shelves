@@ -112,8 +112,9 @@ class Profile extends Component {
             username: username,
             friendUsername: friendUsername
         })
-        .then(res => this.handleClick())
-        .catch(err => console.log(err));  
+        .then(res => console.log(res))
+        .catch(err => console.log(err)); 
+        this.handleClick() 
     };
 
     // deletes friends
@@ -278,7 +279,7 @@ class Profile extends Component {
                 </div>
                 <Snackbar
                     open={this.state.open}
-                    message="Friend Added!"
+                    message="Following!"
                     autoHideDuration={4000}
                     onRequestClose={this.handleRequestClose}
                 /> 

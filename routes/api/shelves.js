@@ -389,11 +389,11 @@ router.post("/addfriend", function(req, res) {
             userId: req.body.friendId, 
             friendId: loggedInUser.id,
             friendUsername: req.body.friendUsername,
-            message: `${req.body.friendUsername} added you!`
+            message: `${req.body.friendUsername} followed you!`
         })
         .then(function(subResult) {
             res.json(subResults);
-            console.log('friend added');
+            console.log('followed');
         })   
     })
 });
