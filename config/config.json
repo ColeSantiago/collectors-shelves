@@ -15,21 +15,11 @@
     "dialect": "mysql"
   },
   "production": {
-    "use_env_variable": "JAWSDB_URL",
-    "ssl": true,
-        "dialectOptions": {
-            "ssl": true
-        },
-     "dialect":"mysql",
-        "dialectOptions": {
-            "bigNumberStrings": true
-        },
-    "username": "bzxgwt2mb14wnc5a",
-    "password": "alb24mrv7kuh1enx",
+    "username": "z5r4qptyumnxxnei",
+    "password": "e8svn828ye82fy33",
     "port": 3306,
-    "database": "ov4li51urbxehhmj",
+    "database": "ci7fvb43utmri5ji",
     "host": "jj820qt5lpu6krut.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     "dialect": "mysql"
-  
   }
 }
