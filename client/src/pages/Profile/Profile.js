@@ -18,6 +18,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Snackbar from 'material-ui/Snackbar';
+import CircularProgress from 'material-ui/CircularProgress';
 
 class Profile extends Component {
 	state = {
@@ -29,10 +30,12 @@ class Profile extends Component {
         currentUser: [],
         isUser: false,
         isClicked: false,
-        open: false
+        open: false,
+        loading: true
 	};
 
     componentDidMount() {
+        setTimeout(() => this.setState({ loading: false }), 1500);
   		this.getUserAndCollections();
   	};	
 
@@ -145,6 +148,15 @@ class Profile extends Component {
     };
 	
 	render() {
+        const { loading } = this.state;
+    
+        if(loading) {
+          return (
+            <MuiThemeProvider>
+                <CircularProgress size={80} thickness={5} />
+            </MuiThemeProvider>
+          ); 
+        }
 		return (
             <MuiThemeProvider>
                 <div className="profile-wrapper"> 

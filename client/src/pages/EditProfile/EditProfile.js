@@ -15,9 +15,20 @@ import { Input, UserDetailsBtn } from "../../components/UserDetailsForm";
 // material ui
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Snackbar from 'material-ui/Snackbar';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
+
+const style = {
+  container: {
+    position: 'relative',
+  },
+  refresh: {
+    display: 'inline-block',
+    position: 'relative',
+  },
+};
 
 class EditPhoto extends Component {
     constructor(props) {
@@ -28,7 +39,8 @@ class EditPhoto extends Component {
             photo: "",
             editBio: "",
             user: [],
-            open:false
+            open:false,
+            loading: false
         };
     };
 
@@ -104,6 +116,8 @@ class EditPhoto extends Component {
 
     // uploads photo
     handleImageUpload(file) {
+        this.setState({loading: true})
+        setTimeout(() => this.setState({ loading: false }), 1500);
         let upload = request.post(CLOUDINARY_UPLOAD_URL)
                             .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
                             .field('file', file);
@@ -129,7 +143,19 @@ class EditPhoto extends Component {
                         accept="image/*"
                         onDrop={this.onImageDrop.bind(this)}
                     >
-                        <p className="drop-text">Drop an image or click select a file to upload. </p>
+                        <div style={style.container}>
+                            {this.state.loading ? (
+                                <RefreshIndicator
+                                    size={40}
+                                    left={10}
+                                    top={0}
+                                    status="loading"
+                                    style={style.refresh}
+                                />
+                                ) : (
+                                        <p className="drop-text">Drop an image or click select a file to upload. </p>
+                                    )}
+                        </div>
                     </Dropzone>
                         <div>
                             {this.state.uploadedFileCloudinaryUrl === '' ? null :

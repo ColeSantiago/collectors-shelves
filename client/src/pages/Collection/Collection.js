@@ -16,10 +16,21 @@ import DeletePhotoBtn from "../../components/DeletePhotoBtn";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Snackbar from 'material-ui/Snackbar';
 // import CircularProgress from 'material-ui/CircularProgress';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 // cloudinary info
 const CLOUDINARY_UPLOAD_PRESET = "a5flcvfp";
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/colee/image/upload";
+
+const style = {
+  container: {
+    position: 'relative',
+  },
+  refresh: {
+    display: 'inline-block',
+    position: 'relative',
+  },
+};
 
 class Collection extends Component {
 	constructor(props) {
@@ -28,7 +39,6 @@ class Collection extends Component {
 		this.state = {
 			uploadedFileCloudinaryUrl: "",
 			collectionInfo: [],
-			keywords: [],
 			photos: [],
 			editTitle: "",
 			user: [],
@@ -36,6 +46,7 @@ class Collection extends Component {
 			open: false,
 			isUser: false,
 			photoLimit: 10,
+			loading: false
 		};
 	};
 
@@ -115,6 +126,8 @@ class Collection extends Component {
 
 	// uploads photos
 	handleImageUpload(file) {
+		this.setState({loading: true})
+		setTimeout(() => this.setState({ loading: false }), 1500);
 		let upload = request.post(CLOUDINARY_UPLOAD_URL)
 							.field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
 							.field('file', file);
@@ -157,9 +170,22 @@ class Collection extends Component {
 								multiple={false}
 								accept="image/*"
 								onDrop={this.onImageDrop.bind(this)}
-							>
-								<p className="drop-text">Drop an image or click select a file to upload. </p>
-							</Dropzone>
+							>	
+								<div style={style.container}>
+									{this.state.loading ? (
+
+										<RefreshIndicator
+									      size={40}
+									      left={10}
+									      top={0}
+									      status="loading"
+									      style={style.refresh}
+									    />
+										) : (
+												<p className="drop-text">Drop an image or click select a file to upload. </p>
+											)}
+								</div>
+							</Dropzone>    
 						</div>
 					) : (
 			                null
@@ -196,7 +222,7 @@ class Collection extends Component {
 			            </div>
 		                <Snackbar
 		                  open={this.state.open}
-		                  message="Photo Uploaded, give it a second"
+		                  message="Photo Uploaded"
 		                  autoHideDuration={4000}
 		                  onRequestClose={this.handleRequestClose}
 		                />

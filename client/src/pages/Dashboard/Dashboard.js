@@ -16,6 +16,7 @@ import { PhotoList, PhotoListItem } from "../../components/PhotoListDashboard";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Divider from 'material-ui/Divider';
 import Toggle from 'material-ui/Toggle';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
   toggle: {
@@ -47,10 +48,12 @@ class Dashboard extends Component {
         photoLimit: 10,
         toggled: false,
         searchText: '',
-        searchResults: []
+        searchResults: [],
+        loading: true
 	};
 
     componentDidMount() {
+        setTimeout(() => this.setState({ loading: false }), 1500);
   		this.getcurrentUserAndActivity();
   	};		
 
@@ -101,6 +104,15 @@ class Dashboard extends Component {
     };
 	
 	render() {
+        const { loading } = this.state;
+    
+        if(loading) {
+          return (
+            <MuiThemeProvider>
+                <CircularProgress size={80} thickness={5} />
+            </MuiThemeProvider>
+          ); 
+        }
 		return (
             <MuiThemeProvider>
     		  <Wrapper>
