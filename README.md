@@ -1,6 +1,6 @@
 # Collector's Shelves
 
-This a a react app that allows users to join and share photos of whatever they collect, as well as follow others, and applaud others for their collections.
+This is a react app that allows users to join and share photos of whatever they collect, as well as follow others, and applaud others for their collections.
 
 ### Technologies used:
 
