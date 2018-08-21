@@ -89,7 +89,7 @@ router.post("/signin", function(req, res) {
                 res.json({login_status: true});
             // if the passwords do not match 
             } else {
-                alert("We cannot find either you Username or Password");
+                alert("We cannot find either your Username or Password");
                 res.json(err);
             } 
         });
